@@ -1,0 +1,8 @@
+name: 'BuildGear Theme'
+type: theme
+description: 'Giao diện đồ án PC Master Race của tôi'
+package: Custom
+core_version_requirement: ^10 || ^11
+base theme: stable9
+libraries:
+  - buildgear/global

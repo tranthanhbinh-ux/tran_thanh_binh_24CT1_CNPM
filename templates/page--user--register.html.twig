@@ -1,0 +1,987 @@
+{#
+/**
+ * @file
+ * BuildGear - Custom Register Page Template
+ *
+ * Template: page--user--register.html.twig
+ * Theme: buildgear (Drupal 10)
+ *
+ * QUAN TRỌNG:
+ * - File này CHỈ thay đổi giao diện trang đăng ký.
+ * - Toàn bộ logic registration do Drupal xử lý.
+ * - Form đăng ký được render qua {{ page.content }}.
+ * - Không tự tạo input, không viết PHP, không hard-code credentials.
+ * - CSRF token và hidden fields của Drupal được giữ nguyên.
+ * - Drupal xử lý: tạo user, validation, password hashing, session, DB.
+ *
+ * URL: /user/register
+ */
+#}
+
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+<head>
+  <head-placeholder token="{{ placeholder_token }}">
+  <title>{{ head_title|safe_join(' | ') }}</title>
+  <css-placeholder token="{{ placeholder_token }}">
+  <js-placeholder token="{{ placeholder_token }}">
+
+  {# ── Google Fonts ── #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       BuildGear Register — Dark Gaming Theme
+       Đồng bộ 100% phong cách với page--user--login.html.twig
+       ═══════════════════════════════════════════════════════════ */
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body.buildgear-register {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #070a10;
+      color: #c8ccd4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    /* ── Background Effects ── */
+    .bg-effects {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-effects::before {
+      content: '';
+      position: absolute;
+      top: -15%;
+      left: -8%;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(0, 180, 255, .06) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float-orb 9s ease-in-out infinite;
+    }
+
+    .bg-effects::after {
+      content: '';
+      position: absolute;
+      bottom: -8%;
+      right: -6%;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(0, 229, 255, .04) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float-orb 11s ease-in-out infinite reverse;
+    }
+
+    @keyframes float-orb {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(25px, -18px); }
+    }
+
+    /* Grid pattern */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .025;
+      background-image:
+        linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    /* ── Decorative shapes ── */
+    .deco-shape {
+      position: fixed;
+      border: 1px solid rgba(0, 180, 255, .08);
+      pointer-events: none;
+      z-index: 1;
+      animation: deco-float 7s ease-in-out infinite;
+    }
+
+    .deco-hex {
+      width: 50px;
+      height: 50px;
+      top: 12%;
+      right: 10%;
+      transform: rotate(30deg);
+      border-radius: 8px;
+    }
+
+    .deco-square {
+      width: 35px;
+      height: 35px;
+      bottom: 18%;
+      left: 7%;
+      transform: rotate(45deg);
+      border-radius: 6px;
+      border-color: rgba(0, 229, 255, .06);
+      animation-delay: 2.5s;
+    }
+
+    .deco-circle {
+      width: 28px;
+      height: 28px;
+      top: 45%;
+      left: 12%;
+      border-radius: 50%;
+      border-color: rgba(0, 180, 255, .05);
+      animation-delay: 4s;
+    }
+
+    .deco-dot {
+      width: 20px;
+      height: 20px;
+      top: 30%;
+      right: 18%;
+      border-radius: 4px;
+      transform: rotate(60deg);
+      border-color: rgba(0, 229, 255, .05);
+      animation-delay: 1.5s;
+    }
+
+    @keyframes deco-float {
+      0%, 100% { opacity: .4; transform: rotate(30deg) translateY(0); }
+      50% { opacity: .8; transform: rotate(30deg) translateY(-12px); }
+    }
+
+    /* ── Header ── */
+    .reg-header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      background: rgba(7, 10, 16, .8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #00b4ff, #00e5ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 180, 255, .3);
+    }
+
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .logo-text .white { color: #ffffff; }
+    .logo-text .cyan { color: #00e5ff; }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #6b7280;
+      font-size: .85rem;
+      font-weight: 500;
+    }
+
+    .back-link:hover { color: #00e5ff; }
+
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ── Main Content ── */
+    .reg-main {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .reg-wrapper {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    /* ── Card Icon ── */
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(0, 180, 255, .12), rgba(0, 229, 255, .08));
+      border: 1px solid rgba(0, 180, 255, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 180, 255, .15); }
+      50% { box-shadow: 0 0 30px rgba(0, 180, 255, .3); }
+    }
+
+    .card-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #00e5ff;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Title ── */
+    .reg-title {
+      text-align: center;
+      margin-bottom: 6px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      color: #ffffff;
+    }
+
+    .reg-title .accent {
+      background: linear-gradient(135deg, #00b4ff, #00e5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .reg-subtitle {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: .85rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    /* ── Register Card ── */
+    .reg-card {
+      background: #11151f;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow:
+        0 4px 40px rgba(0,0,0,.4),
+        0 0 80px rgba(0, 180, 255, .03);
+    }
+
+    /* ── Drupal Messages ── */
+    .reg-messages .messages {
+      margin-bottom: 20px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: .85rem;
+      line-height: 1.5;
+      border: 1px solid;
+    }
+
+    .reg-messages .messages--error {
+      background: rgba(255, 60, 95, .08);
+      border-color: rgba(255, 60, 95, .25);
+      color: #ff6b8a;
+    }
+
+    .reg-messages .messages--error h2 {
+      color: #ff6b8a;
+    }
+
+    .reg-messages .messages--status {
+      background: rgba(0, 229, 255, .08);
+      border-color: rgba(0, 229, 255, .25);
+      color: #00e5ff;
+    }
+
+    .reg-messages .messages--warning {
+      background: rgba(251, 191, 36, .08);
+      border-color: rgba(251, 191, 36, .25);
+      color: #fbbf24;
+    }
+
+    .reg-messages .messages h2 {
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+    }
+
+    .reg-messages .messages a {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .reg-messages .messages ul {
+      margin: 6px 0 0 16px;
+      padding: 0;
+    }
+
+    .reg-messages .messages ul li {
+      margin-bottom: 4px;
+    }
+
+    /* ══════════════════════════════════════════
+       DRUPAL FORM STYLING
+       CSS selector nhắm vào các element
+       mà Drupal tự render qua {{ page.content }}.
+       Không tự tạo input/form nào.
+       ══════════════════════════════════════════ */
+
+    /* Hide Drupal default page title & tabs */
+    .reg-card .page-title,
+    .reg-card h1.page-title { display: none; }
+    .reg-card .tabs { display: none; }
+
+    /* Form item wrapper */
+    .reg-card .form-item {
+      margin-bottom: 22px;
+    }
+
+    /* Labels */
+    .reg-card .form-item label,
+    .reg-card label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-bottom: 8px;
+      letter-spacing: .03em;
+    }
+
+    /* Required marker */
+    .reg-card .form-required::after {
+      content: ' *';
+      color: #ff6b8a;
+    }
+
+    /* Text inputs */
+    .reg-card input[type="text"],
+    .reg-card input[type="password"],
+    .reg-card input[type="email"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #263241;
+      background: #0c131d;
+      color: #e5e7eb;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .25s, box-shadow .25s;
+    }
+
+    .reg-card input[type="text"]:focus,
+    .reg-card input[type="password"]:focus,
+    .reg-card input[type="email"]:focus {
+      border-color: #00c8ff;
+      box-shadow: 0 0 0 3px rgba(0, 200, 255, .08), 0 0 20px rgba(0, 180, 255, .06);
+    }
+
+    .reg-card input[type="text"]::placeholder,
+    .reg-card input[type="password"]::placeholder,
+    .reg-card input[type="email"]::placeholder {
+      color: #4b5563;
+    }
+
+    /* Textareas */
+    .reg-card textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #263241;
+      background: #0c131d;
+      color: #e5e7eb;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      outline: none;
+      resize: vertical;
+      min-height: 80px;
+      transition: border-color .25s, box-shadow .25s;
+    }
+
+    .reg-card textarea:focus {
+      border-color: #00c8ff;
+      box-shadow: 0 0 0 3px rgba(0, 200, 255, .08);
+    }
+
+    /* Select dropdowns */
+    .reg-card select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #263241;
+      background: #0c131d;
+      color: #e5e7eb;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color .25s;
+    }
+
+    .reg-card select:focus {
+      border-color: #00c8ff;
+    }
+
+    /* Description text */
+    .reg-card .form-item .description {
+      font-size: .75rem;
+      color: #6b7280;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .reg-card .form-item .description a {
+      color: #00b4ff;
+    }
+
+    .reg-card .form-item .description a:hover {
+      color: #00e5ff;
+    }
+
+    /* Error messages per field */
+    .reg-card .form-item--error-message {
+      font-size: .75rem;
+      color: #ff6b8a;
+      margin-top: 6px;
+    }
+
+    .reg-card .form-item--error input {
+      border-color: rgba(255, 60, 95, .5) !important;
+    }
+
+    /* ── Password section ── */
+    .reg-card .password-confirm {
+      margin-bottom: 0;
+    }
+
+    /* Password strength indicator (Drupal built-in) */
+    .reg-card .password-strength {
+      margin-top: 10px;
+    }
+
+    .reg-card .password-strength__meter {
+      height: 6px;
+      border-radius: 3px;
+      background: #1a2030;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .reg-card .password-strength__indicator {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .4s ease, background-color .4s ease;
+    }
+
+    .reg-card .password-strength__indicator.is-weak {
+      background: #ff3c5f;
+    }
+    .reg-card .password-strength__indicator.is-fair {
+      background: #fbbf24;
+    }
+    .reg-card .password-strength__indicator.is-good {
+      background: #00b4ff;
+    }
+    .reg-card .password-strength__indicator.is-strong {
+      background: #22c55e;
+    }
+
+    .reg-card .password-strength__title {
+      font-size: .75rem;
+      color: #6b7280;
+    }
+
+    .reg-card .password-strength__text {
+      font-size: .75rem;
+      font-weight: 600;
+    }
+
+    .reg-card .password-confirm-message {
+      font-size: .75rem;
+      margin-top: 6px;
+    }
+
+    .reg-card .password-confirm-message.ok {
+      color: #22c55e;
+    }
+
+    .reg-card .password-confirm-message.error {
+      color: #ff6b8a;
+    }
+
+    .reg-card .password-suggestions {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(0, 180, 255, .04);
+      border: 1px solid rgba(0, 180, 255, .1);
+      font-size: .75rem;
+      color: #9ca3af;
+    }
+
+    .reg-card .password-suggestions__title {
+      font-weight: 700;
+      color: #c8ccd4;
+      margin-bottom: 6px;
+    }
+
+    .reg-card .password-suggestions ul {
+      margin: 0 0 0 16px;
+      padding: 0;
+    }
+
+    .reg-card .password-suggestions li {
+      margin-bottom: 3px;
+    }
+
+    /* ── File Upload / Avatar ── */
+    .reg-card .form-managed-file,
+    .reg-card .form-type-managed-file,
+    .reg-card .image-widget {
+      position: relative;
+    }
+
+    .reg-card .form-managed-file .form-file,
+    .reg-card input[type="file"] {
+      width: 100%;
+      padding: 16px 14px;
+      border-radius: 10px;
+      border: 2px dashed #263241;
+      background: #0c131d;
+      color: #9ca3af;
+      font-family: 'Inter', sans-serif;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: border-color .25s, background .25s;
+    }
+
+    .reg-card .form-managed-file .form-file:hover,
+    .reg-card input[type="file"]:hover {
+      border-color: rgba(0, 200, 255, .3);
+      background: rgba(0, 180, 255, .03);
+    }
+
+    .reg-card .form-managed-file .form-file:focus,
+    .reg-card input[type="file"]:focus {
+      border-color: #00c8ff;
+      outline: none;
+    }
+
+    /* File upload / remove buttons inside managed file */
+    .reg-card .form-managed-file .form-submit,
+    .reg-card .image-widget .form-submit {
+      margin-top: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #263241;
+      background: #0c131d;
+      color: #9ca3af;
+      font-family: 'Inter', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .reg-card .form-managed-file .form-submit:hover,
+    .reg-card .image-widget .form-submit:hover {
+      border-color: rgba(0, 200, 255, .3);
+      color: #00e5ff;
+      background: rgba(0, 180, 255, .05);
+    }
+
+    /* Image preview */
+    .reg-card .image-preview,
+    .reg-card .image-widget-data img {
+      max-width: 120px;
+      height: auto;
+      border-radius: 12px;
+      border: 2px solid #263241;
+      margin-top: 10px;
+    }
+
+    .reg-card .file-size {
+      font-size: .75rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    /* ── Checkboxes ── */
+    .reg-card input[type="checkbox"] {
+      accent-color: #00b4ff;
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── Fieldsets / Details (Drupal wraps some fields) ── */
+    .reg-card fieldset,
+    .reg-card details {
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 22px;
+      background: rgba(255,255,255,.01);
+    }
+
+    .reg-card fieldset legend,
+    .reg-card details summary {
+      font-size: .85rem;
+      font-weight: 700;
+      color: #c8ccd4;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .reg-card details summary:hover {
+      color: #00e5ff;
+    }
+
+    /* ── Main submit button ── */
+    .reg-card > .form-actions,
+    .reg-card .user-register-form > .form-actions {
+      margin-top: 28px;
+    }
+
+    .reg-card input[type="submit"],
+    .reg-card button[type="submit"],
+    .reg-card .form-actions > .form-submit {
+      width: 100%;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #00b4ff, #0090dd);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .3s;
+      box-shadow: 0 0 20px rgba(0, 180, 255, .25);
+    }
+
+    .reg-card input[type="submit"]:hover,
+    .reg-card button[type="submit"]:hover,
+    .reg-card .form-actions > .form-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(0, 180, 255, .45), 0 4px 20px rgba(0,0,0,.3);
+    }
+
+    .reg-card input[type="submit"]:active,
+    .reg-card button[type="submit"]:active,
+    .reg-card .form-actions > .form-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Override: file upload buttons should NOT look like main submit */
+    .reg-card .form-managed-file input[type="submit"],
+    .reg-card .image-widget input[type="submit"] {
+      width: auto;
+      padding: 8px 16px;
+      font-size: .8rem;
+      background: #0c131d;
+      border: 1px solid #263241;
+      color: #9ca3af;
+      box-shadow: none;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .reg-card .form-managed-file input[type="submit"]:hover,
+    .reg-card .image-widget input[type="submit"]:hover {
+      border-color: rgba(0, 200, 255, .3);
+      color: #00e5ff;
+      background: rgba(0, 180, 255, .05);
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── CAPTCHA (nếu có module) ── */
+    .reg-card .captcha {
+      margin: 20px 0;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.01);
+    }
+
+    /* ── Extra Links ── */
+    .reg-extra-links {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .reg-extra-links a {
+      display: inline-block;
+      font-size: .82rem;
+      font-weight: 500;
+      color: #6b7280;
+      transition: color .2s;
+    }
+
+    .reg-extra-links a:hover {
+      color: #00e5ff;
+    }
+
+    .reg-extra-links .separator {
+      display: block;
+      height: 1px;
+      background: rgba(255,255,255,.05);
+      margin: 16px auto;
+      width: 80px;
+    }
+
+    .reg-extra-links .login-link {
+      color: #00b4ff;
+      font-weight: 600;
+    }
+
+    .reg-extra-links .login-link:hover {
+      color: #00e5ff;
+    }
+
+    /* ── Footer ── */
+    .reg-footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 20px;
+      font-size: .75rem;
+      color: #374151;
+      border-top: 1px solid rgba(255,255,255,.03);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .reg-header {
+        padding: 16px 20px;
+      }
+
+      .logo-text {
+        font-size: 1.1rem;
+      }
+
+      .back-link span {
+        display: none;
+      }
+
+      .reg-main {
+        padding: 24px 16px;
+      }
+
+      .reg-card {
+        padding: 28px 20px;
+        border-radius: 16px;
+      }
+
+      .reg-title {
+        font-size: 1.15rem;
+      }
+
+      .card-icon {
+        width: 52px;
+        height: 52px;
+        margin-bottom: 20px;
+      }
+
+      .card-icon svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .deco-shape {
+        display: none;
+      }
+
+      .reg-wrapper {
+        max-width: 100%;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      .reg-wrapper {
+        max-width: 460px;
+      }
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #070a10; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00b4ff; }
+  </style>
+</head>
+
+<body class="buildgear-register {{ body_classes }}">
+
+  {# ── Background Effects ── #}
+  <div class="bg-effects"></div>
+  <div class="bg-grid"></div>
+
+  {# ── Decorative Shapes ── #}
+  <div class="deco-shape deco-hex"></div>
+  <div class="deco-shape deco-square"></div>
+  <div class="deco-shape deco-circle"></div>
+  <div class="deco-shape deco-dot"></div>
+
+  {# ── Header (đồng bộ với Login) ── #}
+  <header class="reg-header">
+    <a href="{{ path('<front>') }}" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+        </svg>
+      </div>
+      <span class="logo-text">
+        <span class="white">Build</span><span class="cyan">Gear</span>
+      </span>
+    </a>
+
+    <a href="{{ path('<front>') }}" class="back-link">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span>Quay lại trang chủ</span>
+    </a>
+  </header>
+
+  {# ── Main ── #}
+  <main class="reg-main">
+    <div class="reg-wrapper">
+
+      {# Icon chip CPU (đồng bộ với Login) #}
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+          <rect x="9" y="9" width="6" height="6"/>
+          <line x1="9" y1="1" x2="9" y2="4"/>
+          <line x1="15" y1="1" x2="15" y2="4"/>
+          <line x1="9" y1="20" x2="9" y2="23"/>
+          <line x1="15" y1="20" x2="15" y2="23"/>
+          <line x1="20" y1="9" x2="23" y2="9"/>
+          <line x1="20" y1="15" x2="23" y2="15"/>
+          <line x1="1" y1="9" x2="4" y2="9"/>
+          <line x1="1" y1="15" x2="4" y2="15"/>
+        </svg>
+      </div>
+
+      {# Tiêu đề #}
+      <h1 class="reg-title">
+        TẠO TÀI KHOẢN <span class="accent">BUILDGEAR</span>
+      </h1>
+      <p class="reg-subtitle">
+        Đăng ký tài khoản để quản lý đơn hàng và trải nghiệm BuildGear
+      </p>
+
+      {# Register Card #}
+      <div class="reg-card">
+
+        {# ── Drupal Messages (lỗi validation, thông báo...) ── #}
+        {% if page.highlighted %}
+          <div class="reg-messages">
+            {{ page.highlighted }}
+          </div>
+        {% endif %}
+
+        {% if messages %}
+          <div class="reg-messages">
+            {{ messages }}
+          </div>
+        {% endif %}
+
+        {# ══════════════════════════════════════════════════════
+           QUAN TRỌNG: Render form đăng ký của Drupal
+           ──────────────────────────────────────────────────────
+           {{ page.content }} render toàn bộ form register:
+           - Input email
+           - Input username
+           - Input password + confirm password
+           - Password strength indicator
+           - File upload (avatar / hình ảnh)
+           - CSRF token (hidden field)
+           - form_build_id (hidden field)
+           - form_id (hidden field)
+           - Nút submit "Tạo tài khoản mới"
+           - Mọi field custom khác
+
+           KHÔNG TỰ TẠO FORM — Drupal xử lý hoàn toàn.
+           Drupal sẽ tạo user thật trong database.
+           Tài khoản sẽ xuất hiện tại /admin/people.
+           ══════════════════════════════════════════════════════ #}
+        {{ page.content }}
+
+        {# ── Extra Links ── #}
+        <div class="reg-extra-links">
+          <span style="font-size: .82rem; color: #6b7280;">Đã có tài khoản? </span>
+          <a href="{{ path('user.login') }}" class="login-link">Đăng nhập</a>
+          <div class="separator"></div>
+          <a href="{{ path('<front>') }}">← Quay lại trang chủ</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  {# ── Footer ── #}
+  <footer class="reg-footer">
+    © 2026 BuildGear - PC Components &amp; Performance
+  </footer>
+
+  <js-bottom-placeholder token="{{ placeholder_token }}">
+</body>
+</html>

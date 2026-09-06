@@ -1,0 +1,320 @@
+{#
+/**
+ * @file
+ * BuildGear - User Profile Page Template
+ *
+ * Template: page--user.html.twig
+ * Theme: buildgear (Drupal 10)
+ *
+ * ĐỒNG BỘ:
+ * - Đồng bộ 100% với giao diện Login và Register của BuildGear.
+ * - Sử dụng dữ liệu User thật từ Drupal 10 (không hard-code).
+ * - Sử dụng các route và link chuẩn của Drupal (edit, logout, front).
+ * - Giữ nguyên authentication và session của Drupal.
+ *
+ * URL: /user hoặc /user/{id}
+ */
+#}
+
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+<head>
+  <head-placeholder token="{{ placeholder_token }}">
+  <title>{{ head_title|safe_join(' | ') }}</title>
+  <css-placeholder token="{{ placeholder_token }}">
+  <js-placeholder token="{{ placeholder_token }}">
+
+  {# ── Google Fonts ── #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  {# ── User Profile Stylesheet ── #}
+  <link rel="stylesheet" href="{{ base_path ~ directory }}/css/user.css">
+</head>
+
+<body class="buildgear-user-body {{ body_classes }}">
+
+  {# ── Background Glow Effects & Geometric Grid ── #}
+  <div class="buildgear-user-bg-effects"></div>
+  <div class="buildgear-user-bg-grid"></div>
+
+  {# ── 1. HEADER (Đồng bộ phong cách BuildGear) ── #}
+  <header class="buildgear-user-header">
+    <a href="{{ path('<front>') }}" class="buildgear-user-logo">
+      <div class="buildgear-user-logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+        </svg>
+      </div>
+      <span class="buildgear-user-logo-text">
+        <span class="buildgear-user-logo-white">Build</span><span class="buildgear-user-logo-cyan">Gear</span>
+      </span>
+    </a>
+
+    <nav class="buildgear-user-nav">
+      <a href="{{ path('<front>') }}" class="buildgear-user-nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Trang chủ
+      </a>
+      <a href="{{ path('<front>') }}#products" class="buildgear-user-nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        Sản phẩm
+      </a>
+      <a href="{{ path('<front>') }}#compare" class="buildgear-user-nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+        So sánh
+      </a>
+      <a href="{{ path('<front>') }}#cart" class="buildgear-user-nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        Giỏ hàng
+        <span class="buildgear-user-nav-badge">0</span>
+      </a>
+    </nav>
+
+    <div class="buildgear-user-header-user">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>{{ logged_in ? user.getDisplayName() : 'Tài khoản' }}</span>
+    </div>
+  </header>
+
+  {# ── MAIN CONTENT CONTAINER ── #}
+  <main class="buildgear-user-main">
+
+    {# ── 2. TIÊU ĐỀ PROFILE ── #}
+    <div class="buildgear-user-page-title-wrap">
+      <div class="buildgear-user-page-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <div>
+        <h1 class="buildgear-user-title">
+          TÀI KHOẢN <span class="buildgear-user-title-accent">CỦA TÔI</span>
+        </h1>
+        <p class="buildgear-user-subtitle">
+          Quản lý thông tin tài khoản và hoạt động của bạn trên BuildGear
+        </p>
+      </div>
+    </div>
+
+    {# ── Drupal Messages (Thông báo hệ thống, cập nhật tài khoản...) ── #}
+    {% if page.highlighted %}
+      <div class="buildgear-user-messages">
+        {{ page.highlighted }}
+      </div>
+    {% endif %}
+
+    {% if messages %}
+      <div class="buildgear-user-messages">
+        {{ messages }}
+      </div>
+    {% endif %}
+
+    {% if logged_in %}
+      {# ── 3. USER PROFILE CARD (Dữ liệu thật từ Drupal User) ── #}
+      <div class="buildgear-user-card">
+        
+        {# Cột trái: Avatar & Username #}
+        <div class="buildgear-user-avatar-section">
+          <div class="buildgear-user-avatar-wrapper">
+            <div class="buildgear-user-avatar-fallback">
+              {{ user.getDisplayName()|first|upper }}
+            </div>
+            <div class="buildgear-user-avatar-badge" title="Tài khoản đang hoạt động">✓</div>
+          </div>
+          <h2 class="buildgear-user-avatar-username">{{ user.getDisplayName() }}</h2>
+          <div class="buildgear-user-status-tag">
+            <span class="buildgear-user-status-dot"></span>
+            <span>Thành viên BuildGear</span>
+          </div>
+        </div>
+
+        {# Cột phải: Thông tin chi tiết & Nút hành động #}
+        <div class="buildgear-user-info-section">
+          <div class="buildgear-user-info-grid">
+            <div class="buildgear-user-info-item">
+              <span class="buildgear-user-info-label">Tên người dùng</span>
+              <span class="buildgear-user-info-value">{{ user.getDisplayName() }}</span>
+            </div>
+            <div class="buildgear-user-info-item">
+              <span class="buildgear-user-info-label">Địa chỉ Email</span>
+              <span class="buildgear-user-info-value">{{ user.getEmail() ? user.getEmail() : 'Chưa thiết lập' }}</span>
+            </div>
+            <div class="buildgear-user-info-item">
+              <span class="buildgear-user-info-label">Ngày tham gia</span>
+              <span class="buildgear-user-info-value">
+                {{ user.getCreatedTime() ? user.getCreatedTime()|date('d/m/Y') : 'Mới tham gia' }}
+              </span>
+            </div>
+            <div class="buildgear-user-info-item">
+              <span class="buildgear-user-info-label">Trạng thái tài khoản</span>
+              <span class="buildgear-user-info-value buildgear-user-badge-active">
+                ● Đang hoạt động
+              </span>
+            </div>
+          </div>
+
+          {# ── 4. ACTION BUTTONS (Routes chuẩn của Drupal) ── #}
+          <div class="buildgear-user-actions-row">
+            <a href="{{ path('entity.user.edit_form', {'user': user.id}) }}" class="buildgear-user-btn buildgear-user-btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              CHỈNH SỬA TÀI KHOẢN
+            </a>
+            <a href="{{ path('entity.user.edit_form', {'user': user.id}) }}" class="buildgear-user-btn buildgear-user-btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              ĐỔI MẬT KHẨU
+            </a>
+            <a href="{{ path('user.logout') }}" class="buildgear-user-btn buildgear-user-btn-danger">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              ĐĂNG XUẤT
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      {# ── 5. QUICK ACTIONS (TRUY CẬP NHANH) ── #}
+      <h3 class="buildgear-user-section-title">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        TRUY CẬP NHANH
+      </h3>
+      
+      <div class="buildgear-user-quick-grid">
+        {# Card 1: Thông tin tài khoản #}
+        <a href="{{ path('entity.user.edit_form', {'user': user.id}) }}" class="buildgear-user-quick-card">
+          <div class="buildgear-user-quick-icon buildgear-user-quick-icon-blue">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <h4 class="buildgear-user-quick-title">Thông tin tài khoản</h4>
+          <p class="buildgear-user-quick-desc">Quản lý thông tin cá nhân</p>
+        </a>
+
+        {# Card 2: Đơn hàng (Placeholder chuẩn bị cho Drupal Commerce) #}
+        <a href="#orders" class="buildgear-user-quick-card">
+          <div class="buildgear-user-quick-icon buildgear-user-quick-icon-cyan">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          </div>
+          <h4 class="buildgear-user-quick-title">Đơn hàng</h4>
+          <p class="buildgear-user-quick-desc">Xem các đơn hàng của bạn</p>
+        </a>
+
+        {# Card 3: So sánh linh kiện (Placeholder chuẩn bị tích hợp hệ thống Compare) #}
+        <a href="#compare" class="buildgear-user-quick-card">
+          <div class="buildgear-user-quick-icon buildgear-user-quick-icon-red">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </div>
+          <h4 class="buildgear-user-quick-title">So sánh linh kiện</h4>
+          <p class="buildgear-user-quick-desc">Xem các sản phẩm đang so sánh</p>
+        </a>
+
+        {# Card 4: PC Builder (Placeholder chuẩn bị tích hợp PC Builder) #}
+        <a href="#builder" class="buildgear-user-quick-card">
+          <div class="buildgear-user-quick-icon buildgear-user-quick-icon-gold">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
+          <h4 class="buildgear-user-quick-title">PC Builder</h4>
+          <p class="buildgear-user-quick-desc">Quản lý cấu hình PC của bạn</p>
+        </a>
+      </div>
+
+      {# ── 6. ORDER SECTION (ĐƠN HÀNG GẦN ĐÂY) ── #}
+      {# Chuẩn bị cấu trúc để tích hợp Drupal Commerce sau này #}
+      <div id="orders" class="buildgear-user-panel">
+        <h3 class="buildgear-user-section-title">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          ĐƠN HÀNG GẦN ĐÂY
+        </h3>
+        
+        <div class="buildgear-user-empty-state">
+          <div class="buildgear-user-empty-icon">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          </div>
+          <p class="buildgear-user-empty-text">Bạn chưa có đơn hàng nào.</p>
+          <a href="{{ path('<front>') }}#products" class="buildgear-user-btn buildgear-user-btn-primary">
+            KHÁM PHÁ LINH KIỆN
+          </a>
+        </div>
+      </div>
+
+      {# ── 7. COMPARE SECTION (SẢN PHẨM ĐANG SO SÁNH) ── #}
+      {# Chuẩn bị cấu trúc để kết nối hệ thống benchmark compare #}
+      <div id="compare" class="buildgear-user-panel">
+        <h3 class="buildgear-user-section-title">
+          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+          SẢN PHẨM ĐANG SO SÁNH
+        </h3>
+
+        <div class="buildgear-user-empty-state">
+          <div class="buildgear-user-empty-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+          </div>
+          <p class="buildgear-user-empty-text">Bạn chưa chọn sản phẩm nào để so sánh.</p>
+          <a href="{{ path('<front>') }}#products" class="buildgear-user-btn buildgear-user-btn-secondary">
+            SO SÁNH LINH KIỆN
+          </a>
+        </div>
+      </div>
+
+      {# ── 8. PC BUILDER SECTION (PC BUILD CỦA TÔI) ── #}
+      {# Nổi bật tính năng cốt lõi của BuildGear #}
+      <div id="builder" class="buildgear-user-panel buildgear-user-panel-highlight">
+        <h3 class="buildgear-user-section-title">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          PC BUILD CỦA TÔI
+        </h3>
+
+        <div class="buildgear-user-empty-state">
+          <div class="buildgear-user-empty-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
+          <p class="buildgear-user-empty-text">Bạn chưa lưu cấu hình PC nào.</p>
+          <a href="{{ path('<front>') }}#builder" class="buildgear-user-btn buildgear-user-btn-primary">
+            XÂY DỰNG PC NGAY
+          </a>
+        </div>
+      </div>
+
+      {# ── 9. LOGOUT AREA (Khu vực đăng xuất cuối trang) ── #}
+      <div class="buildgear-user-logout-box">
+        <span class="buildgear-user-logout-prompt">Bạn muốn đăng xuất khỏi BuildGear?</span>
+        <a href="{{ path('user.logout') }}" class="buildgear-user-btn buildgear-user-btn-danger">
+          ĐĂNG XUẤT
+        </a>
+      </div>
+
+    {% else %}
+      {# Trường hợp người dùng chưa đăng nhập khi vào /user #}
+      <div class="buildgear-user-panel" style="text-align: center; padding: 48px 24px;">
+        <p class="buildgear-user-empty-text" style="font-size: 1.1rem; margin-bottom: 24px;">
+          Vui lòng đăng nhập để xem thông tin tài khoản BuildGear của bạn.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <a href="{{ path('user.login') }}" class="buildgear-user-btn buildgear-user-btn-primary">ĐĂNG NHẬP</a>
+          <a href="{{ path('user.register') }}" class="buildgear-user-btn buildgear-user-btn-secondary">ĐĂNG KÝ</a>
+        </div>
+      </div>
+    {% endif %}
+
+    {# ── Drupal Core Content Fallback (Giữ nguyên khả năng render form/blocks mặc định nếu có) ── #}
+    <div class="buildgear-user-drupal-content">
+      {{ page.content }}
+    </div>
+
+  </main>
+
+  {# ── 10. FOOTER (Đồng bộ Login/Register) ── #}
+  <footer class="buildgear-user-footer">
+    <div class="buildgear-user-footer-links">
+      <a href="{{ path('<front>') }}">Trang chủ</a>
+      <a href="{{ path('<front>') }}#products">Sản phẩm</a>
+      <a href="{{ path('<front>') }}#compare">Benchmark</a>
+      <a href="#">Hỗ trợ</a>
+    </div>
+    <div>© 2026 BuildGear - PC Components &amp; Performance. All rights reserved.</div>
+  </footer>
+
+  <js-bottom-placeholder token="{{ placeholder_token }}">
+</body>
+</html>
