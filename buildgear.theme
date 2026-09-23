@@ -1,0 +1,21 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function buildgear_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+  
+  $path_clean = trim($current_path, '/');
+  $alias_clean = trim($path_alias, '/');
+
+  if ($path_clean === 'cart' || $alias_clean === 'cart') {
+    $suggestions[] = 'page__cart';
+  }
+  if ($path_clean === 'checkout' || $alias_clean === 'checkout') {
+    $suggestions[] = 'page__checkout';
+  }
+}

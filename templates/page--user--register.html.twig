@@ -751,6 +751,17 @@
       box-shadow: none;
     }
 
+    /* Hide Drupal default page title & local tasks tabs */
+    .reg-card .page-title,
+    .reg-card h1.page-title,
+    .reg-card .tabs,
+    .reg-card ul.tabs,
+    .reg-card ul.primary,
+    .reg-card .block-local-tasks-block,
+    .reg-card nav.tabs {
+      display: none !important;
+    }
+
     /* ── CAPTCHA (nếu có module) ── */
     .reg-card .captcha {
       margin: 20px 0;
@@ -981,6 +992,55 @@
   <footer class="reg-footer">
     © 2026 BuildGear - PC Components &amp; Performance
   </footer>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 1. Đổi tên các Nhãn (Labels)
+    const labelMail = document.querySelector('label[for="edit-mail"]');
+    if (labelMail) labelMail.childNodes[0].textContent = 'ĐỊA CHỈ EMAIL ';
+
+    const labelName = document.querySelector('label[for="edit-name"]');
+    if (labelName) labelName.childNodes[0].textContent = 'TÊN ĐĂNG NHẬP ';
+
+    const labelPass1 = document.querySelector('label[for="edit-pass-pass1"]');
+    if (labelPass1) labelPass1.childNodes[0].textContent = 'MẬT KHẨU ';
+
+    const labelPass2 = document.querySelector('label[for="edit-pass-pass2"]');
+    if (labelPass2) labelPass2.childNodes[0].textContent = 'XÁC NHẬN MẬT KHẨU ';
+
+    const labelPic = document.querySelector('label[for*="edit-user-picture"]');
+    if (labelPic) labelPic.childNodes[0].textContent = 'ẢNH ĐẠI DIỆN (AVATAR) ';
+
+    // 2. Thêm Placeholder gợi ý vào từng ô nhập
+    const inputMail = document.getElementById('edit-mail');
+    if (inputMail) inputMail.placeholder = 'Nhập email của bạn (vd: email@domain.com)...';
+
+    const inputName = document.getElementById('edit-name');
+    if (inputName) inputName.placeholder = 'Nhập tên tài khoản (viết liền không dấu)...';
+
+    const inputPass1 = document.getElementById('edit-pass-pass1');
+    if (inputPass1) inputPass1.placeholder = 'Nhập mật khẩu bí mật...';
+
+    const inputPass2 = document.getElementById('edit-pass-pass2');
+    if (inputPass2) inputPass2.placeholder = 'Nhập lại mật khẩu để xác nhận...';
+
+    // 3. Đổi nút submit thành ĐĂNG KÝ TÀI KHOẢN
+    const submitButtons = document.querySelectorAll('.reg-card input[type="submit"], .reg-card button[type="submit"], #edit-submit');
+    submitButtons.forEach(btn => {
+      if (btn.tagName === 'INPUT') {
+        btn.value = 'ĐĂNG KÝ TÀI KHOẢN';
+      } else {
+        btn.textContent = 'ĐĂNG KÝ TÀI KHOẢN';
+      }
+    });
+
+    // 4. Dịch các dòng mô tả hướng dẫn bên dưới
+    const descMail = document.getElementById('edit-mail--description');
+    if (descMail) descMail.textContent = 'Địa chỉ email này sẽ dùng để kích hoạt tài khoản và nhận thông báo đơn hàng.';
+
+    const descName = document.getElementById('edit-name--description');
+    if (descName) descName.textContent = 'Tên tài khoản viết liền, không dấu.';
+  });
+</script>
 
   <js-bottom-placeholder token="{{ placeholder_token }}">
 </body>

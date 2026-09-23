@@ -14,7 +14,7 @@
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
-            surface: { 900: '#0a0a0f', 800: '#12121a', 700: '#1a1a26', 600: '#222230' },
+            surface: { 900: '#0a0a0f', 800: '#12121a', 700: '#1a1a26', 600: '#222230'  },
             neon:    { blue: '#00b4ff', cyan: '#00e5ff', red: '#ff3c5f', pink: '#ff2d78' },
             accent:  { gold: '#fbbf24' },
           },
@@ -83,13 +83,30 @@
     .navbar-scrolled { backdrop-filter: blur(20px); background: rgba(10,10,15,.92) !important; }
 
     /* Tooltip */
+    [data-tooltip] {
+      position: relative;
+    }
     [data-tooltip]:hover::after {
       content: attr(data-tooltip);
-      position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
-      background: #1a1a26; color: #ccc; font-size: .7rem; padding: 4px 10px;
-      border-radius: 6px; white-space: nowrap; z-index: 50;
-      border: 1px solid rgba(255,255,255,.08);
+      position: absolute;
+      top: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a26;
+      color: #e5e7eb;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      z-index: 60;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+      pointer-events: none;
     }
+
+    /* Ép ảnh từ Drupal API vừa khít với khung thiết kế */
+    .img-drupal-fit img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
   </style>
 </head>
 
@@ -112,21 +129,152 @@
         </span>
       </a>
 
+      <!-- Category Dropdown Button (GearVN Style) -->
+      <div class="relative group hidden lg:block">
+        <!-- Trigger Button -->
+        <button type="button" class="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-surface-800 border border-white/10 hover:border-neon-blue/40 text-sm font-bold text-white transition-all duration-200 focus:outline-none">
+          <!-- Menu Icon (Default) -->
+          <svg class="w-5 h-5 text-neon-blue group-hover:hidden transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <!-- Close Icon (Hover) -->
+          <svg class="w-5 h-5 text-neon-red hidden group-hover:block transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span>Danh mục</span>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="absolute top-full left-0 mt-3 w-72 bg-surface-800 border border-white/10 rounded-2xl shadow-2xl p-2 z-50 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+          <div class="space-y-1">
+            <!-- Item 1: Laptop -->
+            <a href="#products" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-blue shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3" />
+                </svg>
+                <span>Laptop & Phụ kiện</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 2: PC Gaming / PC Build -->
+            <a href="#products" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-cyan shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                </svg>
+                <span>PC Gaming / PC Đồ họa</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 3: CPU -->
+            <a href="#products" onclick="setCategory('CPU')" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-blue shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z" />
+                </svg>
+                <span>CPU - Bộ vi xử lý</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 4: VGA -->
+            <a href="#products" onclick="setCategory('VGA')" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-red shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+                <span>VGA - Card màn hình</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 5: Mainboard -->
+            <a href="#products" onclick="setCategory('Mainboard')" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-accent-gold shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+                <span>Mainboard - Bo mạch chủ</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 6: RAM - Ổ cứng -->
+            <a href="#products" onclick="setCategory('RAM')" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-cyan shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 5.625c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                </svg>
+                <span>RAM - Ổ cứng SSD</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 7: Màn hình -->
+            <a href="#products" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-blue shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+                <span>Màn hình máy tính</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+
+            <!-- Item 8: Bàn phím & Chuột -->
+            <a href="#products" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 hover:text-neon-blue transition-colors group/item text-sm font-medium">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-neon-red shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                </svg>
+                <span>Bàn phím, Chuột & Gear</span>
+              </div>
+              <svg class="w-4 h-4 text-gray-500 group-hover/item:text-neon-blue group-hover/item:translate-x-0.5 transition-all shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
       <!-- Nav Links (desktop) -->
       <nav class="hidden lg:flex items-center gap-1">
-        <a href="#" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">CPU</a>
-        <a href="#" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">VGA</a>
-        <a href="#" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">Mainboard</a>
-        <a href="#" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">RAM</a>
+        <a href="#products" onclick="setCategory('CPU')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">CPU</a>
+        <a href="#products" onclick="setCategory('VGA')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">VGA</a>
+        <a href="#products" onclick="setCategory('Mainboard')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">Mainboard</a>
+        <a href="#products" onclick="setCategory('RAM')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-colors">RAM</a>
       </nav>
 
       <!-- Search Bar -->
-      <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-6 search-container">
         <div class="relative w-full group">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-neon-blue transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-neon-blue transition-colors z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <input type="text" placeholder="Tìm kiếm GPU, CPU, điểm benchmark…" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-700 border border-white/5 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/30 transition" />
+          <input type="text" oninput="handleSearch(this.value, 'searchDropdown')" placeholder="Tìm kiếm GPU, CPU, điểm benchmark…" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-700 border border-white/5 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/30 transition" />
+          
+          <!-- Live Search Dropdown -->
+          <div id="searchDropdown" class="hidden absolute top-full left-0 w-full mt-2 z-[60] bg-surface-800 rounded-2xl border border-white/10 shadow-2xl overflow-hidden backdrop-blur-xl animate-fade-in">
+            <!-- Rendered by JS -->
+          </div>
         </div>
       </div>
 
@@ -141,22 +289,78 @@
           <span id="compareBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-neon-red text-[10px] font-bold text-white flex items-center justify-center transition-transform scale-0">0</span>
         </button>
         <!-- Cart -->
-        <button class="relative p-2.5 rounded-xl hover:bg-white/5 transition-colors group" data-tooltip="Giỏ hàng">
+        <a href="/drupal10/web/cart" class="relative p-2.5 rounded-xl hover:bg-white/5 transition-colors group inline-flex items-center justify-center cursor-pointer" data-tooltip="Giỏ hàng">
           <svg class="w-5 h-5 text-gray-400 group-hover:text-neon-blue transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/>
           </svg>
-          <span class="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-neon-blue text-[10px] font-bold text-white flex items-center justify-center">3</span>
-        </button>
-        <!-- Đăng Nhập / Đăng Ký (Desktop) -->
+          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-neon-blue text-[10px] font-bold text-white flex items-center justify-center transition-all duration-200 scale-0">0</span>
+        </a>
+        <!-- Đăng Nhập / Đăng Ký / Profile Dropdown (Desktop) -->
         <div class="hidden sm:flex items-center gap-2 ml-1">
-          <a href="/drupal10/web/user/login" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-all">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-            Đăng Nhập
-          </a>
-          <a href="/drupal10/web/user/register" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neon-blue text-white text-sm font-semibold hover:shadow-neon-blue hover:-translate-y-0.5 transition-all duration-200">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>
-            Đăng Ký
-          </a>
+          {% if logged_in %}
+            <!-- Profile Dropdown (GearVN Style) -->
+            <div class="relative group">
+              <!-- Trigger Button -->
+              <button class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-surface-800 border border-white/10 hover:border-neon-blue/40 text-sm font-medium text-gray-200 transition-all duration-200 focus:outline-none">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-neon-blue to-neon-cyan flex items-center justify-center text-white font-bold text-xs shadow-[0_0_10px_rgba(0,180,255,0.35)]">
+                  {{ user.displayname|first|upper }}
+                </div>
+                <span class="max-w-[120px] truncate text-xs font-semibold text-gray-200 group-hover:text-neon-blue transition-colors">
+                  {{ user.displayname }}
+                </span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:text-neon-blue transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+
+              <!-- Dropdown Menu -->
+              <div class="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200">
+                <!-- User Info Header -->
+                <div class="px-4 py-3 border-b border-gray-100">
+                  <p class="text-sm font-bold text-gray-900 truncate">{{ user.displayname }}</p>
+                  <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                    <p class="text-xs font-medium text-gray-500">Khách hàng thành viên</p>
+                  </div>
+                </div>
+
+                <!-- Menu Links -->
+                <div class="py-1">
+                  <a href="/drupal10/web/user" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-neon-blue transition-colors">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                    Tài khoản của tôi
+                  </a>
+                  <a href="/drupal10/web/user" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-neon-blue transition-colors">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                    Đơn hàng của tôi
+                  </a>
+                </div>
+
+                <div class="border-t border-gray-100 pt-1">
+                  <a href="/drupal10/web/user/logout" class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
+                    <svg class="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                    </svg>
+                    Đăng xuất
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <!-- Nút khi chưa đăng nhập -->
+            <a href="/drupal10/web/user/login" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5 transition-all">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+              Đăng Nhập
+            </a>
+            <a href="/drupal10/web/user/register" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-neon-blue text-white text-sm font-semibold hover:shadow-neon-blue hover:-translate-y-0.5 transition-all duration-200">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>
+              Đăng Ký
+            </a>
+          {% endif %}
         </div>
         <!-- Mobile Menu -->
         <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="lg:hidden p-2 rounded-xl hover:bg-white/5">
@@ -168,25 +372,41 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden lg:hidden pb-4 border-t border-white/5 mt-2 pt-3">
       <div class="flex md:hidden mb-3">
-        <div class="relative w-full">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input type="text" placeholder="Tìm kiếm…" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-700 border border-white/5 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-neon-blue/50" />
+        <div class="relative w-full search-container">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" oninput="handleSearch(this.value, 'searchDropdownMobile')" placeholder="Tìm kiếm…" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-700 border border-white/5 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-neon-blue/50" />
+          
+          <!-- Mobile Live Search Dropdown -->
+          <div id="searchDropdownMobile" class="hidden absolute top-full left-0 w-full mt-2 z-[60] bg-surface-800 rounded-2xl border border-white/10 shadow-2xl overflow-hidden backdrop-blur-xl animate-fade-in">
+            <!-- Rendered by JS -->
+          </div>
         </div>
       </div>
       <a href="#" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5">CPU</a>
       <a href="#" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5">VGA</a>
       <a href="#" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5">Mainboard</a>
       <a href="#" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-neon-blue hover:bg-white/5">RAM</a>
-      <!-- Đăng Nhập / Đăng Ký (Mobile) -->
+      <!-- Đăng Nhập / Đăng Ký / Tài Khoản (Mobile) -->
       <div class="border-t border-white/5 mt-3 pt-3 flex gap-2">
-        <a href="/drupal10/web/user/login" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 text-sm font-medium text-gray-300 hover:text-neon-blue hover:border-neon-blue/30 transition-all">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-          Đăng Nhập
-        </a>
-        <a href="/drupal10/web/user/register" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-neon-blue text-white text-sm font-semibold hover:shadow-neon-blue transition-all">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>
-          Đăng Ký
-        </a>
+        {% if logged_in %}
+          <a href="/drupal10/web/user" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-surface-800 border border-white/10 text-sm font-medium text-gray-200 hover:text-neon-blue hover:border-neon-blue/30 transition-all">
+            <svg class="w-4 h-4 text-neon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+            Tài khoản
+          </a>
+          <a href="/drupal10/web/user/logout" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm font-semibold hover:bg-red-500/20 transition-all">
+            <svg class="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
+            Đăng xuất
+          </a>
+        {% else %}
+          <a href="/drupal10/web/user/login" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 text-sm font-medium text-gray-300 hover:text-neon-blue hover:border-neon-blue/30 transition-all">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+            Đăng Nhập
+          </a>
+          <a href="/drupal10/web/user/register" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-neon-blue text-white text-sm font-semibold hover:shadow-neon-blue transition-all">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>
+            Đăng Ký
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -269,11 +489,11 @@
         <p class="mt-2 text-gray-400 text-sm">Xếp hạng theo điểm benchmark thực tế — cập nhật hàng ngày.</p>
       </div>
       <!-- Filters -->
-      <div class="flex items-center gap-2 mt-4 sm:mt-0">
-        <button class="px-4 py-2 rounded-lg bg-neon-blue/10 border border-neon-blue/30 text-neon-blue text-xs font-semibold">Tất cả</button>
-        <button class="px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition">CPU</button>
-        <button class="px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition">VGA</button>
-        <button class="px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition">RAM</button>
+      <div class="flex items-center gap-2 mt-4 sm:mt-0 flex-wrap">
+        <button onclick="setCategory('all')" data-cat="all" class="filter-btn px-4 py-2 rounded-lg bg-neon-blue/10 border border-neon-blue/30 text-neon-blue text-xs font-semibold transition-all">Tất cả</button>
+        <button onclick="setCategory('CPU')" data-cat="CPU" class="filter-btn px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition-all">CPU</button>
+        <button onclick="setCategory('VGA')" data-cat="VGA" class="filter-btn px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition-all">VGA</button>
+        <button onclick="setCategory('RAM')" data-cat="RAM" class="filter-btn px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition-all">RAM</button>
       </div>
     </div>
 
@@ -346,7 +566,7 @@
       <!-- Modal Footer -->
       <div class="px-6 py-4 border-t border-white/5 flex justify-end gap-3">
         <button onclick="closeCompareModal()" class="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:bg-white/10 transition">Đóng</button>
-        <button class="px-5 py-2.5 rounded-xl bg-neon-blue text-white text-sm font-semibold shadow-neon-blue transition-all hover:shadow-[0_0_30px_rgba(0,180,255,.45)]">Thêm Sản Phẩm Tốt Nhất Vào Giỏ 🛒</button>
+        <button onclick="addToCart('Sản phẩm so sánh'); closeCompareModal();" class="px-5 py-2.5 rounded-xl bg-neon-blue text-white text-sm font-semibold shadow-neon-blue transition-all hover:shadow-[0_0_30px_rgba(0,180,255,.45)]">Thêm Sản Phẩm Tốt Nhất Vào Giỏ 🛒</button>
       </div>
     </div>
   </div>
@@ -414,44 +634,133 @@
 
 <!-- ═══════════════════════════════════ JAVASCRIPT ═══════════════════════════════════ -->
 <script>
-// ── Product Data ──
-// Để mảng rỗng để chờ dữ liệu từ API
+// ── Product Data & State ──
 let products = [];
+let compareList = [];
+let cartCount = 0;
+let currentCategory = 'all';
+let searchTerm = '';
 
-// Hàm gọi dữ liệu từ Drupal API
-async function loadDrupalData() {
-  try {
-    // Gọi thẳng vào đường dẫn API bro vừa test
-    const res = await fetch('/drupal10/web/api/products?_format=json');
-    const data = await res.json();
-    
-    // Chuyển đổi dữ liệu Drupal sang chuẩn của giao diện
-    products = data.map((item, index) => {
-      // Xử lý giá tiền (thêm dấu chấm và chữ đ)
-      const formatPrice = Number(item.field_gia_ban).toLocaleString('vi-VN') + '₫';
-      const formatBench = Number(item.field_benchmark).toLocaleString('vi-VN');
-
-      return {
-        id: index + 1,
-        name: item.title, // Lấy tên linh kiện
-        price: formatPrice, // Giá đã format
-        category: 'Linh kiện', // Có thể gắn cứng hoặc nâng cấp lấy từ Drupal sau
-        categoryColor: 'blue',
-        image: 'https://placehold.co/400x300/1a1a26/00b4ff?text=PC', // Tạm dùng ảnh demo
-        benchmarks: { passmark: parseInt(item.field_benchmark) || 0 }, // Điểm benchmark để so sánh
-        benchmarkLabel: 'PassMark: ' + formatBench,
-        specs: { 'Trạng thái': 'Lấy từ Database' }
-      };
-    });
-    
-    renderProducts(); // Gọi lại hàm vẽ thẻ sản phẩm
-  } catch (error) {
-    console.error("Lỗi kết nối API:", error);
+function addToCart(name) {
+  cartCount++;
+  const badge = document.getElementById('cartBadge');
+  if (badge) {
+    badge.textContent = cartCount;
+    badge.classList.remove('scale-0');
+    badge.classList.add('scale-100');
   }
 }
 
-// Chạy hàm ngay khi load web
-loadDrupalData();
+// ── Hàm xử lý Live Search Dropdown (GearVN Dark Theme Style) ──
+function escapeRegex(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function handleSearch(value, targetDropdownId = 'searchDropdown') {
+  const query = value.trim();
+  searchTerm = query;
+  renderProducts();
+
+  const dropdown = document.getElementById(targetDropdownId);
+  if (!dropdown) return;
+
+  if (!query) {
+    dropdown.classList.add('hidden');
+    dropdown.innerHTML = '';
+    return;
+  }
+
+  // Lọc sản phẩm theo từ khóa
+  const qLower = query.toLowerCase();
+  const matched = products.filter(p => (p.name || '').toLowerCase().includes(qLower));
+  const topResults = matched.slice(0, 5);
+
+  dropdown.classList.remove('hidden');
+
+  if (topResults.length === 0) {
+    dropdown.innerHTML = `
+      <div class="px-4 py-6 text-center text-sm text-gray-400">
+        <p class="font-medium">Không tìm thấy sản phẩm nào</p>
+        <p class="text-xs text-gray-500 mt-1">Thử tìm kiếm với từ khóa khác</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Regex để highlight từ khóa
+  const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+
+  const itemsHtml = topResults.map(p => {
+    const highlightedName = p.name.replace(regex, '<span class="text-neon-blue font-bold">$1</span>');
+    const imgContent = p.imageHtml && p.imageHtml.trim()
+      ? p.imageHtml
+      : `<svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>`;
+
+    return `
+      <a href="/drupal10/web/node/${p.nid}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors group">
+        <!-- Ảnh bên trái (nền trắng bo góc) -->
+        <div class="w-12 h-12 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center overflow-hidden img-drupal-fit border border-white/10">
+          ${imgContent}
+        </div>
+        <!-- Thông tin bên phải -->
+        <div class="flex-1 min-w-0">
+          <h4 class="text-sm font-semibold text-white group-hover:text-neon-blue transition-colors line-clamp-2 leading-tight">
+            ${highlightedName}
+          </h4>
+          <p class="text-xs font-bold text-red-500 mt-1">
+            ${p.price}
+          </p>
+        </div>
+      </a>
+    `;
+  }).join('');
+
+  dropdown.innerHTML = `
+    <!-- Header -->
+    <div class="px-4 pt-3 pb-2 flex items-center justify-between border-b border-white/5">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Kết quả tìm kiếm</span>
+      <span class="text-[11px] text-gray-500">${matched.length} sản phẩm</span>
+    </div>
+    
+    <!-- List -->
+    <div class="divide-y divide-white/5 max-h-[320px] overflow-y-auto">
+      ${itemsHtml}
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t border-white/5 bg-surface-900/40">
+      <a href="#products" onclick="document.querySelectorAll('#searchDropdown, #searchDropdownMobile').forEach(el => el.classList.add('hidden'))" class="block w-full py-2.5 px-4 text-center text-xs font-medium text-neon-blue hover:text-neon-cyan hover:bg-white/5 transition-colors">
+        → Xem tất cả kết quả cho "${query}"
+      </a>
+    </div>
+  `;
+}
+
+// ── Tự động ẩn Dropdown khi click bên ngoài (Click Outside) ──
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.search-container')) {
+    document.querySelectorAll('#searchDropdown, #searchDropdownMobile').forEach(el => {
+      el.classList.add('hidden');
+    });
+  }
+});
+
+// ── Hàm xử lý Lọc danh mục (Filter) ──
+function setCategory(cat) {
+  currentCategory = cat;
+
+  // Cập nhật giao diện Active / Inactive cho các nút filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const isCurrent = btn.dataset.cat === cat;
+    if (isCurrent) {
+      btn.className = 'filter-btn px-4 py-2 rounded-lg bg-neon-blue/10 border border-neon-blue/30 text-neon-blue text-xs font-semibold transition-all';
+    } else {
+      btn.className = 'filter-btn px-4 py-2 rounded-lg bg-white/5 border border-white/5 text-gray-400 text-xs font-medium hover:text-white hover:border-white/10 transition-all';
+    }
+  });
+
+  renderProducts();
+}
 
 const catColors = {
   blue: { bg: 'bg-neon-blue/10', text: 'text-neon-blue', border: 'border-neon-blue/20' },
@@ -460,60 +769,168 @@ const catColors = {
   gold: { bg: 'bg-accent-gold/10', text: 'text-accent-gold', border: 'border-accent-gold/20' },
 };
 
-// ── State ──
-let compareList = [];
+function extractText(str) {
+  if (!str) return '';
+  return String(str).replace(/<[^>]*>?/gm, '').trim();
+}
 
-// ── Render Product Grid ──
+function detectCategory(name) {
+  const n = (name || '').toLowerCase();
+  if (n.includes('rtx') || n.includes('gtx') || n.includes('rx') || n.includes('vga') || n.includes('gpu') || n.includes('card') || n.includes('geforce') || n.includes('radeon') || n.includes('graphics')) {
+    return { category: 'VGA', color: 'red' };
+  }
+  if (n.includes('core') || n.includes('ryzen') || n.includes('cpu') || n.includes('i3') || n.includes('i5') || n.includes('i7') || n.includes('i9') || n.includes('threadripper') || n.includes('intel') || n.includes('amd') || n.includes('vi xử lý')) {
+    return { category: 'CPU', color: 'blue' };
+  }
+  if (n.includes('ram') || n.includes('ddr4') || n.includes('ddr5') || n.includes('ddr') || n.includes('fury') || n.includes('vengeance') || n.includes('trident') || n.includes('kingston') || n.includes('corsair') || n.includes('g.skill')) {
+    return { category: 'RAM', color: 'cyan' };
+  }
+  if (n.includes('main') || n.includes('bo mạch') || n.includes('b760') || n.includes('z790') || n.includes('b650') || n.includes('x670') || n.includes('motherboard') || n.includes('asus') || n.includes('msi') || n.includes('gigabyte')) {
+    return { category: 'Mainboard', color: 'gold' };
+  }
+  return { category: 'Linh kiện', color: 'blue' };
+}
+
+// Hàm gọi dữ liệu từ Drupal API
+async function loadDrupalData() {
+  try {
+    const res = await fetch('/drupal10/web/api/products?_format=json');
+    const data = await res.json();
+    
+    if (Array.isArray(data)) {
+      products = data.map((item, index) => {
+        const title = extractText(item.title || item.title_1 || item.name || 'Linh kiện PC');
+        const catInfo = detectCategory(title);
+        const priceVal = Number(item.field_gia_ban) || 0;
+        const benchVal = parseInt(item.field_benchmark) || 0;
+        const formatPrice = priceVal > 0 ? priceVal.toLocaleString('vi-VN') + '₫' : 'Liên hệ';
+        const formatBench = benchVal.toLocaleString('vi-VN');
+        const rawImg = item.field_hinh_anh_san_pham || item.field_image || '';
+        const nid = item.nid || (item.view_node ? item.view_node.split('/').pop() : index + 1);
+
+        return {
+          id: index + 1,
+          nid: nid,
+          name: title,
+          price: formatPrice,
+          category: catInfo.category, 
+          categoryColor: catInfo.color,
+          imageHtml: rawImg,
+          benchmarks: { passmark: benchVal },
+          benchmarkLabel: 'PassMark: ' + formatBench,
+          specs: { 'Danh mục': catInfo.category, 'Trạng thái': 'Chính hãng 100%' }
+        };
+      });
+    }
+    
+    renderProducts();
+  } catch (error) {
+    console.error("Lỗi kết nối API:", error);
+  }
+}
+
+// ── Render Product Grid (có tích hợp Smart Search & Smart Filter) ──
 function renderProducts() {
   const grid = document.getElementById('productGrid');
-  grid.innerHTML = products.map(p => {
-    const c = catColors[p.categoryColor];
+  if (!grid) return;
+
+  // Lọc sản phẩm theo Search Term và Smart Category
+  const filteredProducts = products.filter(p => {
+    const nameLower = (p.name || '').toLowerCase();
+    const searchLower = searchTerm.toLowerCase();
+
+    // 1. Điều kiện tìm kiếm (theo tên hoặc danh mục)
+    const matchesSearch = !searchLower || nameLower.includes(searchLower) || (p.category || '').toLowerCase().includes(searchLower);
+
+    // 2. Điều kiện danh mục thông minh (Smart Category)
+    let matchesCategory = true;
+    if (currentCategory === 'CPU') {
+      matchesCategory = p.category === 'CPU' || nameLower.includes('core') || nameLower.includes('ryzen') || nameLower.includes('cpu') || nameLower.includes('intel') || nameLower.includes('amd');
+    } else if (currentCategory === 'VGA') {
+      matchesCategory = p.category === 'VGA' || nameLower.includes('rtx') || nameLower.includes('gtx') || nameLower.includes('rx') || nameLower.includes('vga') || nameLower.includes('gpu') || nameLower.includes('card');
+    } else if (currentCategory === 'RAM') {
+      matchesCategory = p.category === 'RAM' || nameLower.includes('ram') || nameLower.includes('ddr') || nameLower.includes('fury') || nameLower.includes('corsair') || nameLower.includes('kingston');
+    } else if (currentCategory !== 'all') {
+      matchesCategory = (p.category || '').toLowerCase() === currentCategory.toLowerCase() || nameLower.includes(currentCategory.toLowerCase());
+    }
+
+    return matchesSearch && matchesCategory;
+  });
+
+  // Nếu không tìm thấy sản phẩm nào
+  if (filteredProducts.length === 0) {
+    grid.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+      <svg class="w-12 h-12 text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+      </svg>
+      <p class="text-base font-semibold text-gray-300">Không tìm thấy sản phẩm nào</p>
+      <p class="text-xs text-gray-500 mt-1">Thử chọn danh mục khác hoặc xóa từ khóa tìm kiếm.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filteredProducts.map(p => {
+    const c = catColors[p.categoryColor] || catColors['blue'];
     const inCompare = compareList.includes(p.id);
     return `
       <div class="card-hover rounded-2xl bg-surface-700 border border-white/5 overflow-hidden flex flex-col">
-        <!-- Image -->
-        <div class="relative group">
-          <img src="${p.image}" alt="${p.name}" class="w-full h-48 object-cover" loading="lazy" />
-          <!-- Category Tag -->
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${c.bg} ${c.text} border ${c.border}">
-            ${p.category}
-          </span>
-          <!-- Benchmark Badge -->
-          <div class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-neon-blue/30 shadow-neon-blue">
-            <span class="text-[11px] font-bold text-neon-blue">⚡ ${p.benchmarkLabel}</span>
+        
+        <!-- Link ảnh: Click vào là bay sang trang chi tiết -->
+        <a href="/drupal10/web/node/${p.nid}" class="group relative block overflow-hidden rounded-t-2xl">
+          <!-- Khung chứa ảnh -->
+          <div class="w-full h-48 bg-surface-800 flex items-center justify-center relative overflow-hidden rounded-xl">
+            <!-- Hiệu ứng Zoom khi Hover -->
+            <div class="w-full h-full flex items-center justify-center img-drupal-fit transition-transform duration-500 ease-out group-hover:scale-105">
+              ${p.imageHtml && p.imageHtml.trim() ? p.imageHtml : `
+                <div class="flex flex-col items-center justify-center text-gray-500 gap-2">
+                  <svg class="w-12 h-12 text-gray-600 group-hover:text-neon-blue transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                  </svg>
+                  <span class="text-[11px] font-medium text-gray-500">BuildGear Hardware</span>
+                </div>
+              `}
+            </div>
+
+            <!-- Huy hiệu danh mục (Góc trên bên trái) -->
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${c.bg} ${c.text} border ${c.border}">
+              ${p.category}
+            </span>
+
+            <!-- Huy hiệu Benchmark (Góc trên bên phải) -->
+            <div class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-neon-blue/30 shadow-neon-blue">
+              <span class="text-[11px] font-bold text-neon-blue">⚡ ${p.benchmarkLabel}</span>
+            </div>
           </div>
-        </div>
+        </a>
 
         <!-- Body -->
         <div class="p-5 flex flex-col flex-1">
-          <h3 class="text-sm font-bold text-white leading-snug mb-1">${p.name}</h3>
+          
+          <!-- Link tên sản phẩm: Click là bay sang trang chi tiết -->
+          <a href="/drupal10/web/node/${p.nid}">
+            <h3 class="text-sm font-bold text-white leading-snug mb-1 hover:text-neon-blue transition-colors">${p.name}</h3>
+          </a>
 
-          <!-- Specs preview -->
           <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2 mb-auto">
             ${Object.entries(p.specs).map(([k,v]) => `<span class="text-[11px] text-gray-500"><span class="text-gray-400">${k}:</span> ${v}</span>`).join('')}
           </div>
 
-          <!-- Price + actions -->
           <div class="mt-4 pt-4 border-t border-white/5">
             <div class="flex items-end justify-between mb-3">
               <p class="text-xl font-extrabold text-white">${p.price}</p>
             </div>
 
             <div class="flex gap-2">
-              <!-- Compare toggle -->
               <button onclick="toggleCompare(${p.id})" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 ${inCompare
                   ? 'bg-neon-blue/15 border border-neon-blue/40 text-neon-blue shadow-[0_0_12px_rgba(0,180,255,.15)]'
                   : 'bg-white/5 border border-white/10 text-gray-400 hover:text-neon-blue hover:border-neon-blue/30'}">
                 <svg class="w-4 h-4" fill="${inCompare ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  ${inCompare
-                    ? '<path d="M5 13l4 4L19 7"/>'
-                    : '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>'}
+                  ${inCompare ? '<path d="M5 13l4 4L19 7"/>' : '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>'}
                 </svg>
                 ${inCompare ? 'Đã thêm' : 'So sánh'}
               </button>
 
-              <!-- Add to Cart -->
-              <button class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-neon-blue text-white text-xs font-semibold hover:shadow-neon-blue transition-all duration-200 hover:-translate-y-0.5">
+              <button onclick="addToCart('${p.name}')" class="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-neon-blue text-white text-xs font-semibold hover:shadow-neon-blue transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
                 Thêm vào giỏ
               </button>
@@ -714,6 +1131,7 @@ window.addEventListener('scroll', () => {
 
 // ── Init ──
 renderProducts();
+loadDrupalData();
 </script>
 
 </body>

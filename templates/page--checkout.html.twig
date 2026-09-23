@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán đơn hàng | BuildGearshop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            surface: {
+              900: '#0a0a0f',
+              800: '#12121a',
+              700: '#1a1a26',
+            },
+            neon: {
+              blue: '#00b4ff',
+              cyan: '#00e5ff',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0f; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00b4ff; }
+  </style>
+</head>
+<body class="bg-surface-900 text-white font-sans min-h-screen flex flex-col">
+
+  <!-- Header dùng chung -->
+  <header class="py-4 bg-surface-900/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <a href="/drupal10/web/" class="text-xl font-extrabold text-white flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-neon-blue to-neon-cyan flex items-center justify-center text-white">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+        </div>
+        <span>Build<span class="text-neon-blue">Gear</span>shop</span>
+      </a>
+      <a href="/drupal10/web/cart" class="text-sm font-medium text-gray-400 hover:text-neon-blue transition-colors flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+        <span>Quay lại Giỏ hàng</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-10">
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+        <span class="text-neon-blue">⚡</span> Thông Tin Thanh Toán & Đặt Hàng
+      </h1>
+      <p class="text-sm text-gray-400 mt-1">Vui lòng kiểm tra kỹ thông tin nhận hàng và phương thức thanh toán.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- CỘT TRÁI: FORM THÔNG TIN (70% ~ 8 cols) -->
+      <div class="lg:col-span-8 space-y-6">
+        
+        <!-- 1. Thông tin khách hàng -->
+        <div class="bg-surface-800 border border-white/5 rounded-2xl p-6 sm:p-7 shadow-xl">
+          <h2 class="text-base sm:text-lg font-bold mb-4 text-neon-blue flex items-center gap-2">
+            <span>👤</span> 1. Thông tin người nhận hàng
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">Họ và tên</label>
+              <input type="text" id="custName" placeholder="Nguyễn Văn A" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">Số điện thoại <span class="text-red-500">*</span></label>
+              <input type="tel" id="custPhone" placeholder="0901234567" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all" required />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">Địa chỉ Gmail</label>
+              <input type="email" id="custEmail" placeholder="customer@gmail.com" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">Số CCCD / CMND <span class="text-red-500">*</span></label>
+              <input type="text" id="custCccd" placeholder="079xxxxxxxx" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Hình thức nhận hàng -->
+        <div class="bg-surface-800 border border-white/5 rounded-2xl p-6 sm:p-7 shadow-xl">
+          <h2 class="text-base sm:text-lg font-bold mb-4 text-neon-blue flex items-center gap-2">
+            <span>📍</span> 2. Địa chỉ nhận hàng
+          </h2>
+          <div class="space-y-4">
+            <label class="flex items-center gap-3 p-3.5 rounded-xl bg-black/20 border border-neon-blue/30 cursor-pointer">
+              <input type="radio" name="deliveryType" value="home" checked class="accent-neon-blue w-4 h-4" />
+              <span class="text-sm font-semibold text-gray-200">Giao hàng tận nơi</span>
+            </label>
+            <div>
+              <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">Địa chỉ chi tiết (Số nhà, đường, phường, quận, TP...) <span class="text-red-500">*</span></label>
+              <input type="text" id="custAddress" placeholder="Ví dụ: 123 Đường Nguyễn Trãi, Phường Bến Thành, Quận 1, TP.HCM" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Phương thức vận chuyển -->
+        <div class="bg-surface-800 border border-white/5 rounded-2xl p-6 sm:p-7 shadow-xl">
+          <h2 class="text-base sm:text-lg font-bold mb-4 text-neon-blue flex items-center gap-2">
+            <span>🚚</span> 3. Phương thức vận chuyển
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="flex flex-col p-4 rounded-xl bg-black/30 border border-white/10 hover:border-neon-blue/40 cursor-pointer transition-all">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-bold text-sm text-white">Nhanh (Fast)</span>
+                <input type="radio" name="shippingMethod" value="fast" class="accent-neon-blue w-4 h-4" />
+              </div>
+              <span class="text-xs text-gray-400">Nhận hàng trong 1-2 ngày</span>
+            </label>
+
+            <label class="flex flex-col p-4 rounded-xl bg-black/30 border border-neon-blue/50 cursor-pointer transition-all shadow-[0_0_15px_rgba(0,180,255,0.08)]">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-bold text-sm text-neon-blue">Tiêu chuẩn</span>
+                <input type="radio" name="shippingMethod" value="standard" checked class="accent-neon-blue w-4 h-4" />
+              </div>
+              <span class="text-xs text-gray-400">Nhận hàng trong 3-5 ngày</span>
+            </label>
+
+            <label class="flex flex-col p-4 rounded-xl bg-black/30 border border-white/10 hover:border-neon-blue/40 cursor-pointer transition-all">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-bold text-sm text-white">Tiết kiệm</span>
+                <input type="radio" name="shippingMethod" value="economy" class="accent-neon-blue w-4 h-4" />
+              </div>
+              <span class="text-xs text-gray-400">Nhận hàng trong 5-7 ngày</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 4. Phương thức thanh toán -->
+        <div class="bg-surface-800 border border-white/5 rounded-2xl p-6 sm:p-7 shadow-xl">
+          <h2 class="text-base sm:text-lg font-bold mb-4 text-neon-blue flex items-center gap-2">
+            <span>💳</span> 4. Phương thức thanh toán
+          </h2>
+          <div class="space-y-3">
+            <label class="flex items-center justify-between p-4 rounded-xl bg-black/30 border border-white/10 hover:border-neon-blue/50 cursor-pointer transition-all">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">💵</span>
+                <div>
+                  <p class="text-sm font-bold text-white">Thanh toán tiền mặt khi nhận hàng (COD)</p>
+                  <p class="text-xs text-gray-400">Thanh toán trực tiếp cho nhân viên giao hàng khi nhận linh kiện</p>
+                </div>
+              </div>
+              <input type="radio" name="paymentMethod" value="cash" checked class="accent-neon-blue w-5 h-5" />
+            </label>
+
+            <label class="flex items-center justify-between p-4 rounded-xl bg-black/30 border border-white/10 hover:border-neon-blue/50 cursor-pointer transition-all">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">📱</span>
+                <div>
+                  <p class="text-sm font-bold text-white">Chuyển khoản / Quét mã VietQR</p>
+                  <p class="text-xs text-gray-400">Tự động sinh mã QR với số tiền và thông tin chuyển khoản chính xác</p>
+                </div>
+              </div>
+              <input type="radio" name="paymentMethod" value="qr" class="accent-neon-blue w-5 h-5" />
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI: TỔNG TIỀN (30% ~ 4 cols) -->
+      <div class="lg:col-span-4 sticky top-24">
+        <div class="bg-surface-800 border border-white/10 rounded-2xl p-6 shadow-2xl space-y-6">
+          <h2 class="text-lg font-bold text-white pb-3 border-b border-white/5">
+            Tóm tắt đơn hàng
+          </h2>
+
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between text-gray-400">
+              <span>Tạm tính:</span>
+              <span id="subTotalDisplay" class="text-white font-semibold">79.000₫</span>
+            </div>
+            <div class="flex justify-between text-gray-400">
+              <span>Phí vận chuyển:</span>
+              <span class="text-emerald-400 font-semibold">Miễn phí</span>
+            </div>
+            <div class="pt-3 border-t border-white/5 flex justify-between items-end">
+              <span class="font-bold text-gray-200">Tổng thanh toán:</span>
+              <span id="orderTotal" data-amount="79000" class="text-2xl font-black text-neon-blue">79.000₫</span>
+            </div>
+          </div>
+
+          <button type="button" onclick="handleCheckout()" class="w-full py-4 rounded-xl bg-neon-blue hover:bg-neon-cyan text-black font-extrabold text-base tracking-wide uppercase shadow-[0_0_25px_rgba(0,180,255,0.4)] hover:shadow-[0_0_35px_rgba(0,229,255,0.6)] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
+            Đặt Mua Hàng
+          </button>
+
+          <p class="text-xs text-center text-gray-500 leading-relaxed">
+            Bằng việc nhấn đặt hàng, bạn đồng ý với <a href="#" class="text-neon-blue hover:underline">Điều khoản mua hàng</a> của BuildGearshop.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-6 border-t border-white/5 bg-surface-900 text-center text-xs text-gray-600 mt-auto">
+    © 2026 BuildGearshop. Mọi quyền được bảo lưu.
+  </footer>
+
+  <!-- POPUP QUÉT MÃ QR (Mặc định ẩn) -->
+  <div id="qrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="relative w-full max-w-sm bg-surface-800 border border-white/10 rounded-3xl p-6 shadow-2xl text-center animate-fade-in">
+      
+      <h3 class="text-lg font-bold text-white mb-1">Quét mã VietQR để thanh toán</h3>
+      <p class="text-xs text-gray-400 mb-4">Mở ứng dụng ngân hàng hoặc ví điện tử để quét mã</p>
+      
+      <!-- Box chứa ảnh mã QR -->
+      <div class="bg-white p-3 rounded-2xl inline-block mx-auto mb-4 shadow-lg">
+        <img id="qrImage" src="" alt="Mã VietQR" class="w-64 h-64 object-contain" />
+      </div>
+
+      <div class="bg-black/30 rounded-xl p-3.5 mb-5 text-xs text-gray-300 space-y-1.5 text-left">
+        <div class="flex justify-between">
+          <span class="text-gray-500">Số tiền:</span> 
+          <span id="qrAmountDisplay" class="font-bold text-neon-blue">79.000₫</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Nội dung:</span> 
+          <span class="font-bold text-white">ThanhToanDonHang</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Người thụ hưởng:</span> 
+          <span class="font-bold text-white">BuildGearshop</span>
+        </div>
+      </div>
+
+      <button type="button" onclick="closeQrModal()" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm transition-colors cursor-pointer">
+        Đóng
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT XỬ LÝ -->
+  <script>
+    function handleCheckout() {
+      // Bước 1: Validate thông tin bắt buộc
+      const phone = document.getElementById('custPhone').value.trim();
+      const cccd = document.getElementById('custCccd').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+
+      if (!phone || !cccd || !address) {
+        alert("Vui lòng nhập đầy đủ SĐT, CCCD và Địa chỉ nhận hàng trước khi thanh toán!");
+        return;
+      }
+
+      // Bước 2: Kiểm tra phương thức thanh toán
+      const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const totalElement = document.getElementById('orderTotal');
+      const totalAmount = totalElement.getAttribute('data-amount') || '79000';
+
+      if (selectedPayment === 'cash') {
+        alert("Đặt hàng thành công! Vui lòng chuẩn bị tiền mặt khi nhận hàng.");
+      } else if (selectedPayment === 'qr') {
+        // Tạo link VietQR động dựa theo số tiền
+        const qrUrl = `https://img.vietqr.io/image/970436-0123456789-compact2.png?amount=${totalAmount}&addInfo=ThanhToanDonHang&accountName=BuildGearshop`;
+        document.getElementById('qrImage').src = qrUrl;
+        document.getElementById('qrAmountDisplay').textContent = Number(totalAmount).toLocaleString('vi-VN') + '₫';
+        
+        // Mở popup
+        document.getElementById('qrModal').classList.remove('hidden');
+      }
+    }
+
+    function closeQrModal() {
+      document.getElementById('qrModal').classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>

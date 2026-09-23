@@ -412,13 +412,13 @@
 
     /* Hide Drupal default page title since we use custom title */
     .login-card .page-title,
-    .login-card h1.page-title {
-      display: none;
-    }
-
-    /* Drupal tabs (local tasks) */
-    .login-card .tabs {
-      display: none;
+    .login-card h1.page-title,
+    .login-card .tabs,
+    .login-card ul.tabs,
+    .login-card ul.primary,
+    .login-card .block-local-tasks-block,
+    .login-card nav.tabs {
+      display: none !important;
     }
 
     /* ── Extra Links ── */
@@ -676,6 +676,33 @@
   <footer class="login-footer">
     © 2026 BuildGear - PC Components &amp; Performance
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 1. Đổi nút submit LOG IN thành ĐĂNG NHẬP
+      const submitButtons = document.querySelectorAll('.login-card input[type="submit"], .login-card button[type="submit"], #edit-submit');
+      submitButtons.forEach(btn => {
+        if (btn.tagName === 'INPUT') {
+          btn.value = 'LOG IN';
+        } else {
+          btn.textContent = 'LOG IN';
+        }
+      });
+
+      // 2. Việt hóa Label & Placeholder
+      const nameLabel = document.querySelector('label[for="edit-name"]');
+      if (nameLabel) nameLabel.textContent = 'TÊN ĐĂNG NHẬP';
+
+      const passLabel = document.querySelector('label[for="edit-pass"]');
+      if (passLabel) passLabel.textContent = 'MẬT KHẨU';
+
+      const nameInput = document.getElementById('edit-name');
+      if (nameInput) nameInput.placeholder = 'Nhập tên tài khoản...';
+
+      const passInput = document.getElementById('edit-pass');
+      if (passInput) passInput.placeholder = 'Nhập mật khẩu...';
+    });
+  </script>
 
   <js-bottom-placeholder token="{{ placeholder_token }}">
 </body>
