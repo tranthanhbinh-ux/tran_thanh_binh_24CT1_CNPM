@@ -1,0 +1,189 @@
+<div class="bg-gray-900 min-h-screen text-gray-200 pt-10"><div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    
+    <!-- CỘT TRÁI (Ảnh) -->
+    <div class="lg:col-span-5">
+      <div class="bg-white rounded-2xl p-6 flex items-center justify-center border border-gray-200 shadow-xl overflow-hidden group h-[400px]">
+         
+         {# Lấy đường dẫn URL của ảnh từ biến thể một cách an toàn #}
+         {% set image_uri = product_entity.getDefaultVariation().field_hinh_anh_san_pham.entity.uri.value %}
+         
+         {% if image_uri %}
+            <img src="{{ file_url(image_uri) }}" alt="{{ product_entity.title.value }}" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" />
+         {% else %}
+            <span class="text-gray-400 font-medium">Chưa có hình ảnh</span>
+         {% endif %}
+
+      </div>
+    </div>
+
+    <!-- CỘT PHẢI (Thông tin) -->
+    <div class="lg:col-span-7 flex flex-col">
+      <!-- Dùng biến render tiêu đề an toàn -->
+      <h1 class="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
+        {{ product.title }}
+      </h1>
+      
+      <div class="prose prose-invert prose-sm text-gray-400 mb-6 border-b border-white/10 pb-6">
+        {{ product.body }}
+      </div>
+
+      <!-- 1. KHỐI GIÁ TIỀN (TO, ĐỎ, NỔI BẬT) -->
+      {% set default_var = product_entity.getDefaultVariation() %}
+      <div class="mb-6">
+        <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold block mb-1">Giá bán niêm yết:</span>
+        <div class="text-4xl sm:text-5xl font-black text-red-500 tracking-tight">
+          {% if default_var.price.number %}
+            {{ default_var.price.number|number_format(0, ',', '.') }} ₫
+          {% else %}
+            Liên hệ
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 2. BẢNG THÔNG SỐ KỸ THUẬT (SPECS GRID) -->
+      <div class="mb-8 rounded-2xl bg-gray-800/50 border border-white/10 p-5 space-y-3">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 mb-3">
+          <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+          </svg>
+          Thông số kỹ thuật chi tiết
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+          {# Thương hiệu #}
+          {% set brand = product_entity.field_thuong_hieu.value ?: default_var.field_thuong_hieu.value %}
+          {% if brand %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Thương hiệu:</span>
+              <span class="text-white font-semibold">{{ brand }}</span>
+            </div>
+          {% endif %}
+
+          {# Dung lượng (VRAM/RAM) #}
+          {% set vram = product_entity.field_dung_luong_vram_ram.value ?: default_var.field_dung_luong_vram_ram.value %}
+          {% if vram %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Dung lượng:</span>
+              <span class="text-cyan-400 font-bold">{{ vram }}</span>
+            </div>
+          {% endif %}
+
+          {# Loại bộ nhớ (Memory Type) #}
+          {% set mem_type = product_entity.field_loai_bo_nho_memory_type.value ?: default_var.field_loai_bo_nho_memory_type.value %}
+          {% if mem_type %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Loại bộ nhớ:</span>
+              <span class="text-white font-medium">{{ mem_type }}</span>
+            </div>
+          {% endif %}
+
+          {# Memory Bus #}
+          {% set bus = product_entity.field_memory_bus.value ?: default_var.field_memory_bus.value %}
+          {% if bus %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Memory Bus:</span>
+              <span class="text-white font-medium">{{ bus }}</span>
+            </div>
+          {% endif %}
+
+          {# TDP (Điện năng tiêu thụ) #}
+          {% set tdp = product_entity.field_tdp_dien_nang.value ?: default_var.field_tdp_dien_nang.value %}
+          {% if tdp %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Công suất (TDP):</span>
+              <span class="text-amber-400 font-semibold">{{ tdp }}</span>
+            </div>
+          {% endif %}
+
+          {# Điểm hiệu năng (Benchmark) #}
+          {% set bench = product_entity.field_diem_hieu_nang_benchmark.value ?: default_var.field_diem_hieu_nang_benchmark.value %}
+          {% if bench %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Điểm Benchmark:</span>
+              <span class="text-emerald-400 font-bold">⚡ {{ bench|number_format(0, ',', '.') }}</span>
+            </div>
+          {% endif %}
+
+          {# Socket (Nếu là CPU/Main) #}
+          {% set socket = product_entity.field_socket.value ?: default_var.field_socket.value %}
+          {% if socket %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Socket:</span>
+              <span class="text-white font-medium">{{ socket }}</span>
+            </div>
+          {% endif %}
+
+          {# Số nhân / Số luồng (Nếu là CPU) #}
+          {% set cores = product_entity.field_so_nhan_cores.value ?: default_var.field_so_nhan_cores.value %}
+          {% set threads = product_entity.field_so_luong_threads.value ?: default_var.field_so_luong_threads.value %}
+          {% if cores or threads %}
+            <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+              <span class="text-gray-400">Cores / Threads:</span>
+              <span class="text-white font-semibold">{{ cores ?: '0' }}C / {{ threads ?: '0' }}T</span>
+            </div>
+          {% endif %}
+
+          {# Bảo hành & Tình trạng (Mặc định) #}
+          <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+            <span class="text-gray-400">Bảo hành:</span>
+            <span class="text-emerald-400 font-semibold">36 Tháng chính hãng</span>
+          </div>
+          <div class="flex justify-between p-2.5 rounded-lg bg-gray-900/60 border border-white/5">
+            <span class="text-gray-400">Tình trạng:</span>
+            <span class="text-cyan-400 font-semibold">Mới 100% Fullbox</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. KHU VỰC FORM MUA HÀNG (ADD TO CART) -->
+      <div class="mt-auto bg-gray-800 rounded-2xl border border-white/5 p-6 md:p-8 shadow-2xl relative overflow-hidden">
+        <div class="relative z-10 commerce-add-to-cart-wrapper">
+          {{ product.variations }}
+        </div>
+      </div>
+    </div>
+    <style>
+/* Ép style form Drupal Commerce hiển thị chuẩn Dark/Neon Theme */
+.commerce-add-to-cart-wrapper .product--variation-field--variation_price__2,
+.commerce-add-to-cart-wrapper .field--name-price {
+    font-size: 2.25rem !important;
+    font-weight: 900 !important;
+    color: #ef4444 !important; /* Đỏ rực */
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.commerce-add-to-cart-wrapper input[type="submit"], 
+.commerce-add-to-cart-wrapper button {
+    background-color: #00b4ff !important; /* Xanh Neon */
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    margin-top: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.commerce-add-to-cart-wrapper input[type="submit"]:hover,
+.commerce-add-to-cart-wrapper button:hover {
+    box-shadow: 0 0 20px rgba(0, 180, 255, 0.6);
+    background-color: #009ce0 !important;
+}
+
+.commerce-add-to-cart-wrapper input[type="number"] {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    width: 80px;
+}
+</style>
+  </div>
+</div></div>

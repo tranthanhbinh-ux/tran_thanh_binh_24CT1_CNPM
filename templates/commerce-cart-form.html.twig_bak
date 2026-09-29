@@ -1,0 +1,20 @@
+﻿{# File: commerce-cart-form.html.twig #}
+<div class="cart-form-container">
+  <form{{ attributes.addClass('space-y-6') }}>
+    
+    <!-- DANH SÁCH SẢN PHẨM ĐỘNG TRONG GIỎ HÀNG -->
+    <div class="cart-items-wrapper">
+      {{ form.form_elements }}
+    </div>
+
+    <!-- TÓM TẮT TỔNG TIỀN VÀ NÚT HÀNH ĐỘNG -->
+    <div class="cart-actions-wrapper">
+      {{ form.actions }}
+    </div>
+
+    {# Render các token bảo mật bắt buộc của form Drupal #}
+    {{ form.form_build_id }}
+    {{ form.form_token }}
+    {{ form.form_id }}
+  </form>
+</div>

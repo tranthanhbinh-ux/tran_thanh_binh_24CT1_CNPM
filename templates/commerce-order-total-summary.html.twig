@@ -1,0 +1,34 @@
+﻿{# File: commerce-order-total-summary.html.twig #}
+<div{{ attributes.addClass('bg-surface-800 border border-white/5 rounded-2xl p-6 shadow-2xl space-y-4 my-6') }}>
+  <h3 class="text-lg font-bold text-white tracking-tight border-b border-white/5 pb-4">
+    Tóm tắt đơn hàng
+  </h3>
+
+  {% if totals.subtotal %}
+    <div class="flex justify-between items-center text-sm">
+      <span class="text-gray-400">Tạm tính</span>
+      <span class="text-gray-200 font-semibold">{{ totals.subtotal|commerce_price_format }}</span>
+    </div>
+  {% endif %}
+
+  {% for adjustment in totals.adjustments %}
+    <div class="flex justify-between items-center text-sm">
+      <span class="text-gray-400">{{ adjustment.label }}</span>
+      <span class="text-gray-200 font-semibold">{{ adjustment.amount|commerce_price_format }}</span>
+    </div>
+  {% endfor %}
+
+  <div class="flex justify-between items-center text-sm">
+    <span class="text-gray-400">Thuế & Phí</span>
+    <span class="text-emerald-400 text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">Đã bao gồm VAT</span>
+  </div>
+
+  <hr class="border-white/10 my-4" />
+
+  {% if totals.total %}
+    <div class="flex justify-between items-end">
+      <span class="text-white font-bold text-base">Tổng cộng</span>
+      <span class="text-red-500 text-2xl font-black tracking-tight">{{ totals.total|commerce_price_format }}</span>
+    </div>
+  {% endif %}
+</div>

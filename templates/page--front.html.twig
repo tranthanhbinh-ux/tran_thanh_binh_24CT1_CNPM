@@ -697,7 +697,7 @@ function handleSearch(value, targetDropdownId = 'searchDropdown') {
       : `<svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>`;
 
     return `
-      <a href="/drupal10/web/node/${p.nid}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors group">
+      <a href="/drupal10/web/product/${p.product_id || p.nid}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors group">
         <!-- Ảnh bên trái (nền trắng bo góc) -->
         <div class="w-12 h-12 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center overflow-hidden img-drupal-fit border border-white/10">
           ${imgContent}
@@ -791,41 +791,39 @@ function detectCategory(name) {
   return { category: 'Linh kiện', color: 'blue' };
 }
 
-// Hàm gọi dữ liệu từ Drupal API
+// Hàm gọi dữ liệu từ REST API mới của Drupal Commerce
 async function loadDrupalData() {
   try {
-    const res = await fetch('/drupal10/web/api/products?_format=json');
+    const res = await fetch('/drupal10/web/api/commerce-products?_format=json');
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) && data.length > 0) {
       products = data.map((item, index) => {
-        const title = extractText(item.title || item.title_1 || item.name || 'Linh kiện PC');
+        const title = extractText(item.title_1 || item.title || 'Linh kiện PC');
         const catInfo = detectCategory(title);
-        const priceVal = Number(item.field_gia_ban) || 0;
-        const benchVal = parseInt(item.field_benchmark) || 0;
-        const formatPrice = priceVal > 0 ? priceVal.toLocaleString('vi-VN') + '₫' : 'Liên hệ';
-        const formatBench = benchVal.toLocaleString('vi-VN');
-        const rawImg = item.field_hinh_anh_san_pham || item.field_image || '';
-        const nid = item.nid || (item.view_node ? item.view_node.split('/').pop() : index + 1);
+        const formatPrice = item.price__number ? String(item.price__number).trim() : 'Liên hệ';
+        const rawImg = item.field_hinh_anh_san_pham || '';
+        const pid = item.product_id || (index + 1);
 
         return {
           id: index + 1,
-          nid: nid,
+          product_id: pid,
+          nid: pid,
           name: title,
           price: formatPrice,
           category: catInfo.category, 
           categoryColor: catInfo.color,
           imageHtml: rawImg,
-          benchmarks: { passmark: benchVal },
-          benchmarkLabel: 'PassMark: ' + formatBench,
+          benchmarks: { passmark: 35000 },
+          benchmarkLabel: 'PassMark: Đang cập nhật',
           specs: { 'Danh mục': catInfo.category, 'Trạng thái': 'Chính hãng 100%' }
         };
       });
+      renderProducts();
     }
-    
-    renderProducts();
   } catch (error) {
-    console.error("Lỗi kết nối API:", error);
+    console.error("Lỗi kết nối Drupal Commerce API:", error);
   }
 }
 
@@ -876,7 +874,7 @@ function renderProducts() {
       <div class="card-hover rounded-2xl bg-surface-700 border border-white/5 overflow-hidden flex flex-col">
         
         <!-- Link ảnh: Click vào là bay sang trang chi tiết -->
-        <a href="/drupal10/web/node/${p.nid}" class="group relative block overflow-hidden rounded-t-2xl">
+        <a href="/drupal10/web/product/${p.product_id || p.nid}" class="group relative block overflow-hidden rounded-t-2xl">
           <!-- Khung chứa ảnh -->
           <div class="w-full h-48 bg-surface-800 flex items-center justify-center relative overflow-hidden rounded-xl">
             <!-- Hiệu ứng Zoom khi Hover -->
@@ -907,7 +905,7 @@ function renderProducts() {
         <div class="p-5 flex flex-col flex-1">
           
           <!-- Link tên sản phẩm: Click là bay sang trang chi tiết -->
-          <a href="/drupal10/web/node/${p.nid}">
+          <a href="/drupal10/web/product/${p.product_id || p.nid}">
             <h3 class="text-sm font-bold text-white leading-snug mb-1 hover:text-neon-blue transition-colors">${p.name}</h3>
           </a>
 

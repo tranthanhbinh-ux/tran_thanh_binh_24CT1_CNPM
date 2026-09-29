@@ -1,193 +1,192 @@
-<!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giỏ hàng của bạn | BuildGearshop</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
-          colors: {
-            surface: { 900: '#0a0a0f', 800: '#12121a', 700: '#1a1a26', 600: '#222230' },
-            neon:    { blue: '#00b4ff', cyan: '#00e5ff', red: '#ff3c5f', pink: '#ff2d78' },
-          },
-          boxShadow: {
-            'neon-blue': '0 0 20px rgba(0,180,255,.35), 0 0 60px rgba(0,180,255,.10)',
-          }
-        },
-      },
-    };
-  </script>
-</head>
+{#
+/**
+ * @file
+ * Theme implementation for the Cart page (BuildGear Dark Gaming Theme).
+ */
+#}
 
-<body class="bg-surface-900 text-gray-200 font-sans min-h-screen flex flex-col antialiased">
+<!-- Header -->
+<header class="py-4 bg-surface-900/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <a href="/drupal10/web/" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-neon-blue to-neon-cyan flex items-center justify-center shadow-neon-blue">
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+        </svg>
+      </div>
+      <span class="text-xl font-extrabold tracking-tight">
+        <span class="text-white">Build</span><span class="text-neon-blue">Gear</span><span class="text-gray-400 font-semibold">shop</span>
+      </span>
+    </a>
 
-  <!-- Header -->
-  <header class="py-4 bg-surface-900/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-      <a href="/drupal10/web/" class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-neon-blue to-neon-cyan flex items-center justify-center shadow-neon-blue">
-          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-          </svg>
-        </div>
-        <span class="text-xl font-extrabold tracking-tight">
-          <span class="text-white">Build</span><span class="text-neon-blue">Gear</span><span class="text-gray-400 font-semibold">shop</span>
-        </span>
+    <div class="flex items-center gap-6">
+      <a href="/drupal10/web/" class="text-sm font-medium text-gray-400 hover:text-neon-blue transition-colors flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+        Tiếp tục mua hàng
       </a>
+    </div>
+  </div>
+</header>
 
-      <div class="flex items-center gap-4">
-        <a href="/drupal10/web/" class="text-sm font-medium text-gray-400 hover:text-neon-blue transition-colors flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
-          Tiếp tục mua hàng
-        </a>
+<!-- Main Content Giỏ Hàng -->
+<main class="flex-1 max-w-7xl mx-auto px-4 py-12 w-full">
+  {# Khu vực hiển thị thông báo lỗi/thành công của Drupal #}
+  {% if page.highlighted %}
+    <div class="mb-6">
+      <div class="bg-gray-800 border-l-4 border-yellow-500 text-yellow-300 p-4 rounded-xl shadow-lg">
+        {{ page.highlighted }}
       </div>
     </div>
-  </header>
+  {% endif %}
 
-  <!-- Main Content -->
-  <main class="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-    <!-- Tiêu đề trang -->
-    <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-8">Giỏ hàng của bạn</h1>
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-black text-white tracking-tight flex items-center gap-3">
+      <svg class="w-8 h-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/>
+      </svg>
+      Giỏ hàng của bạn
+    </h1>
+  </div>
 
-    <!-- Grid Layout 2 Cột -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      
-      <!-- CỘT TRÁI: Danh sách sản phẩm (Chiếm 2/3) -->
-      <div id="cartItemsList" class="lg:col-span-2 space-y-4">
+  <!-- Cái hộp đen chứa giỏ hàng -->
+  <div class="bg-surface-800 rounded-2xl p-6 md:p-8 shadow-2xl border border-white/5 cart-page-wrapper">
+    {{ page.content }}
+  </div>
+</main>
 
-        <!-- 1. Trạng thái rỗng (Empty State) - Mặc định ẩn nếu có hàng -->
-        <div id="cartEmptyState" class="hidden bg-surface-800 border border-white/5 rounded-2xl p-12 text-center flex flex-col items-center justify-center">
-          <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-gray-500 mb-4">
-            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-            </svg>
-          </div>
-          <p class="text-base text-gray-400 mb-4">Không có sản phẩm nào trong giỏ hàng</p>
-          <a href="/drupal10/web/" class="text-blue-500 hover:text-blue-400 font-semibold text-sm transition-colors flex items-center gap-1.5">
-            <span>← Quay lại mua sắm</span>
-          </a>
-        </div>
+<!-- Footer -->
+<footer class="py-6 bg-surface-900 border-t border-white/5 text-center text-xs text-gray-500">
+  © 2026 BuildGearshop. Mọi quyền được bảo lưu.
+</footer>
 
-        <!-- 2. Thẻ sản phẩm mẫu (Cart Item UI) -->
-        <div id="sampleItem1" class="relative bg-surface-800 border border-white/5 rounded-2xl p-4 sm:p-5 flex gap-4 sm:gap-6 items-center">
-          
-          <!-- Khu vực Ảnh: Nền trắng, bo góc, viền xám nhạt -->
-          <div class="w-24 h-24 sm:w-28 sm:h-28 shrink-0 bg-white border border-gray-200 rounded-xl overflow-hidden flex items-center justify-center p-2">
-            <img src="https://placehold.co/200x200/ffffff/11151f?text=RTX+4070+Ti" alt="VGA ASUS ROG Strix GeForce RTX 4070 Ti" class="w-full h-full object-contain" />
-          </div>
+<style>
+  /* Styling Giỏ hàng BuildGear Dark Theme */
+  .cart-page-wrapper .views-form {
+    color: #e2e8f0;
+  }
 
-          <!-- Khu vực Thông tin -->
-          <div class="flex-1 pr-16 sm:pr-24">
-            <h2 class="text-white font-semibold text-sm sm:text-base leading-snug line-clamp-2 mb-2">
-              VGA ASUS ROG Strix GeForce RTX 4070 Ti SUPER 16GB GDDR6X OC Edition
-            </h2>
-            <!-- Giá tiền đỏ, đậm, lớn -->
-            <p class="text-red-500 font-extrabold text-lg sm:text-xl">
-              25.990.000₫
-            </p>
-          </div>
+  .cart-page-wrapper .views-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
 
-          <!-- Icon Xóa (Trash) - Absolute Góc trên cùng bên phải -->
-          <button type="button" onclick="document.getElementById('sampleItem1').remove(); checkCartEmpty();" class="absolute top-4 right-4 sm:top-5 sm:right-5 p-1 text-gray-400 hover:text-red-500 transition-colors" title="Xóa sản phẩm">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-            </svg>
-          </button>
-
-          <!-- Bộ đếm số lượng [ - 1 + ] - Absolute Góc dưới cùng bên phải -->
-          <div class="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 flex items-center border border-red-500 text-red-500 rounded-xl overflow-hidden font-bold text-sm bg-transparent">
-            <button type="button" onclick="changeQty(-1)" class="w-8 h-8 flex items-center justify-center hover:bg-red-500/20 transition-colors focus:outline-none">
-              -
-            </button>
-            <span id="itemQty" class="w-8 h-8 flex items-center justify-center px-1 text-center select-none">
-              1
-            </span>
-            <button type="button" onclick="changeQty(1)" class="w-8 h-8 flex items-center justify-center hover:bg-red-500/20 transition-colors focus:outline-none">
-              +
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- CỘT PHẢI: Tóm tắt đơn hàng (Chiếm 1/3, Sticky Top) -->
-      <div class="lg:col-span-1 sticky top-24">
-        <div class="bg-surface-800 border border-white/5 rounded-2xl p-6 shadow-2xl space-y-4">
-          
-          <h2 class="text-lg font-bold text-white tracking-tight border-b border-white/5 pb-4">
-            Tóm tắt đơn hàng
-          </h2>
-
-          <!-- Dòng Tạm tính -->
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-gray-400">Tạm tính</span>
-            <span id="subTotal" class="text-gray-200 font-semibold">25.990.000₫</span>
-          </div>
-
-          <!-- Dòng Thuế & Phí -->
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-gray-400">Thuế & Phí</span>
-            <span class="text-gray-200 font-semibold">Đã bao gồm VAT</span>
-          </div>
-
-          <!-- Đường kẻ ngang -->
-          <hr class="border-white/10 my-4" />
-
-          <!-- Dòng Tổng cộng -->
-          <div class="flex justify-between items-end">
-            <span class="text-white font-bold text-base">Tổng cộng</span>
-            <span id="grandTotal" class="text-red-500 text-2xl font-black tracking-tight">25.990.000₫</span>
-          </div>
-
-          <!-- Nút Tiến hành thanh toán -->
-          <a href="/drupal10/web/checkout" class="block text-center w-full mt-6 bg-white hover:bg-gray-100 text-gray-900 font-extrabold text-sm py-4 rounded-xl uppercase tracking-wider transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-lg cursor-pointer">
-            Tiến hành thanh toán
-          </a>
-
-          <p class="text-[11px] text-gray-500 text-center mt-3">
-            Bảo mật 100% qua cổng thanh toán trực tuyến
-          </p>
-
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="py-6 bg-surface-900 border-t border-white/5 text-center text-xs text-gray-500">
-    © 2026 BuildGearshop. Mọi quyền được bảo lưu.
-  </footer>
-
-  <script>
-    let qty = 1;
-    const unitPrice = 25990000;
-
-    function changeQty(delta) {
-      qty = Math.max(1, qty + delta);
-      document.getElementById('itemQty').textContent = qty;
-      const totalFormatted = (qty * unitPrice).toLocaleString('vi-VN') + '₫';
-      document.getElementById('subTotal').textContent = totalFormatted;
-      document.getElementById('grandTotal').textContent = totalFormatted;
+  @media (max-width: 768px) {
+    .cart-page-wrapper .views-row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
+  }
 
-    function checkCartEmpty() {
-      const items = document.querySelectorAll('#cartItemsList > div:not(#cartEmptyState)');
-      if (items.length === 0) {
-        document.getElementById('cartEmptyState').classList.remove('hidden');
-        document.getElementById('subTotal').textContent = '0₫';
-        document.getElementById('grandTotal').textContent = '0₫';
-      }
-    }
-  </script>
+  .cart-page-wrapper .views-field-purchased-entity img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    background: #1a1a26;
+    padding: 0.5rem;
+  }
 
-</body>
-</html>
+  .cart-page-wrapper .views-field-unit-price__number,
+  .cart-page-wrapper .views-field-total-price__number {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ef4444;
+  }
+
+  /* Input số lượng */
+  .cart-page-wrapper input[type="number"] {
+    background-color: #1a1a26 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    width: 5rem;
+    font-weight: 600;
+  }
+
+  .cart-page-wrapper input[type="number"]:focus {
+    outline: none;
+    border-color: #00b4ff !important;
+    box-shadow: 0 0 10px rgba(0, 180, 255, 0.4);
+  }
+
+  /* Nút Xóa (Remove) */
+  .cart-page-wrapper input[name*="delete-order-item"],
+  .cart-page-wrapper input[id*="remove-button"] {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cart-page-wrapper input[name*="delete-order-item"]:hover,
+  .cart-page-wrapper input[id*="remove-button"]:hover {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+  }
+
+  /* Form Actions (Cập nhật giỏ hàng & Thanh toán) */
+  .cart-page-wrapper .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    align-items: center;
+  }
+
+  .cart-page-wrapper input[id*="edit-submit"] {
+    background-color: #1a1a26 !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cart-page-wrapper input[id*="edit-submit"]:hover {
+    background-color: #222230 !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .cart-page-wrapper input[id*="edit-checkout"] {
+    background: linear-gradient(135deg, #00b4ff, #0077b6) !important;
+    color: #ffffff !important;
+    padding: 0.875rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 180, 255, 0.35);
+    transition: all 0.2s;
+    border: none !important;
+  }
+
+  .cart-page-wrapper input[id*="edit-checkout"]:hover {
+    background: linear-gradient(135deg, #00c6ff, #0088cc) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 25px rgba(0, 180, 255, 0.5);
+  }
+
+  /* Giỏ hàng trống */
+  .cart-empty-page,
+  .cart-page-wrapper .cart-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #94a3b8;
+    font-size: 1.125rem;
+  }
+</style>

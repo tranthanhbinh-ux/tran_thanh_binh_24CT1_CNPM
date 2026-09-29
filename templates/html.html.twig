@@ -1,0 +1,52 @@
+﻿{#
+/**
+ * @file
+ * Theme implementation for the basic html structure of Drupal (BuildGear Dark Theme).
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes.addClass('scroll-smooth') }}>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
+            colors: {
+              surface: { 900: '#0a0a0f', 800: '#12121a', 700: '#1a1a26', 600: '#222230' },
+              neon:    { blue: '#00b4ff', cyan: '#00e5ff', red: '#ff3c5f', pink: '#ff2d78' },
+            },
+            boxShadow: {
+              'neon-blue': '0 0 20px rgba(0,180,255,.35), 0 0 60px rgba(0,180,255,.10)',
+            }
+          },
+        },
+      };
+    </script>
+    <style>
+      html, body {
+        background-color: #0a0a0f !important;
+        color: #e2e8f0 !important;
+        font-family: 'Inter', sans-serif !important;
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body{{ attributes.addClass('bg-[#0a0a0f] text-gray-200 font-sans min-h-screen antialiased') }}>
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      {{ 'Skip to main content'|t }}
+    </a>
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+  </body>
+</html>

@@ -1,0 +1,37 @@
+/**
+ghi đè giao diện mặc định của  View giỏ hàng
+*/
+{# Giao diện 1 hàng sản phẩm trong giỏ hàng #}
+<div class="flex items-center justify-between p-4 bg-slate-800/60 rounded-xl border border-slate-700 hover:border-cyan-500/50 transition-colors mb-4">
+  
+  <!-- Phần 1: Thông tin sản phẩm -->
+  <div class="flex-1 px-4">
+    <h4 class="text-base font-bold text-gray-100">
+      {# Render Tên sản phẩm #}
+      {{ fields.purchased_entity.content }}
+    </h4>
+    <p class="text-sm text-cyan-400 font-semibold mt-2">
+      {# Render Đơn giá #}
+      Đơn giá: {{ fields.unit_price.content }}
+    </p>
+    <p class="text-xs text-gray-400 mt-1">
+      {# Render Tổng tiền của món này #}
+      Tổng: {{ fields.total.content }}
+    </p>
+  </div>
+
+  <!-- Phần 2: Cột Nhập Số lượng & Nút Xóa -->
+  <div class="flex flex-col items-end gap-3">
+    
+    {# Khung nhập số lượng do Commerce tự tạo form chuẩn #}
+    <div class="w-24 text-black">
+      {{ fields.edit_quantity.content }}
+    </div>
+    
+    {# Nút Xóa khỏi giỏ hàng #}
+    <div class="text-red-400 hover:text-red-300 transition cursor-pointer text-sm font-medium mt-2">
+      {{ fields.remove_button.content }}
+    </div>
+
+  </div>
+</div>
