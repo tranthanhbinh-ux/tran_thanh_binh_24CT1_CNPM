@@ -1,0 +1,38 @@
+﻿{# File: views-view-table--commerce-cart-form.html.twig #}
+{%
+  set classes = [
+    'views-table',
+    'views-view-table',
+    'w-full',
+    'text-left',
+    'border-collapse'
+  ]
+%}
+<div class="overflow-x-auto rounded-xl border border-white/10 bg-surface-700/30 mb-6">
+  <table{{ attributes.addClass(classes) }}>
+    {% if header %}
+      <thead class="bg-surface-700/60 border-b border-white/10 text-xs uppercase tracking-wider text-gray-400">
+        <tr>
+          {% for key, column in header %}
+            <th{{ column.attributes.addClass('px-5 py-4 font-semibold text-gray-300').setAttribute('scope', 'col') }}>
+              {{ column.content }}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+    {% endif %}
+    <tbody class="divide-y divide-white/5 text-sm">
+      {% for row in rows %}
+        <tr{{ row.attributes.addClass('hover:bg-white/[0.02] transition-colors') }}>
+          {% for key, column in row.columns %}
+            <td{{ column.attributes.addClass('px-5 py-4 align-middle') }}>
+              {% for content in column.content %}
+                {{ content.separator }}{{ content.field_output }}
+              {% endfor %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
